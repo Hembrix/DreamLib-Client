@@ -1,0 +1,42 @@
+.catalogContainer {
+  
+  display: flex;
+}
+
+.filters {
+  margin-top: 100px;
+  position: fixed;
+  right: 0;
+  width: 200px;
+  top: 20px; /* Adjust this value as needed */
+  margin-right: 20px;
+}
+
+.catalog {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Измените на flex-start */
+  margin-right: 300px;
+}
+
+
+
+
+.filter {
+  margin-bottom: 10px;
+}
+
+.item {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 1.5em;
+  margin-bottom: 10px;
+}
+
+.info {
+  margin-bottom: 5px;
+}

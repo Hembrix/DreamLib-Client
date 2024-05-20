@@ -1,0 +1,48 @@
+.reader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f0f0f0;
+    padding: 10px;
+    max-width: 100%;
+  }
+  
+  .reader-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .reader-header button {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .reader-header button:disabled {
+    background: #e0e0e0;
+    cursor: not-allowed;
+  }
+  
+  .reader-header span {
+    font-size: 1.2em;
+  }
+  
+  .reader-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    max-height: 80vh;
+  }
+  
+  .reader-content img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  

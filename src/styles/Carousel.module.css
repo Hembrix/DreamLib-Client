@@ -1,0 +1,27 @@
+/* carousel.css */
+.carouselContainer {
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+}
+
+.carousel {
+    display: inline-flex;
+    gap: 16px;
+}
+
+.carousel::-webkit-scrollbar {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .carousel {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel {
+        gap: 5px;
+    }
+}
