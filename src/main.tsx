@@ -19,7 +19,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Routes>
           <Route path="/" element={<HomePage/>}/>
           <Route path="/catalog" element={<CatalogPage/>}/>
-          <Route path='/comics/:titleSlug' element={<ComicsPage/>}/>
+          <Route path="/comics/:titleSlug" element={<ComicsPage/>}/>
           <Route path="/reader/:chapterId" element={<Reader/>} />
         </Routes>
         <Footer/>

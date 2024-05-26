@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import styles from '../../styles/ComicsPage.module.css';
 import { useGetTitleQuery } from '../../store/NAMEInjects/GetComicsInfo';
-import { Link, useParams } from 'react-router-dom'; // Импорт useParams для получения параметров маршрута
+import { Link } from 'react-router-dom';
 
 interface Chapter {
   id: number;
@@ -10,12 +11,11 @@ interface Chapter {
 }
 
 export const ComicsPage: React.FC = () => {
-  const { titleSlug } = useParams<{ titleSlug: string }>(); // Получаем titleSlug из параметров маршрута
+  const { titleSlug } = useParams<{ titleSlug: string }>();
+  const { data: comicsInfo, isLoading, isError } = useGetTitleQuery(titleSlug);
   const [activeTab, setActiveTab] = useState('Описание');
   const [chapters] = useState<Chapter[]>([]); // Пока что нет данных о главах
 
-  // Получение информации о манге по её titleSlug
-  const { data: comicsInfo, isLoading, isError } = useGetTitleQuery(titleSlug);
 
   if (isLoading) return <div>Loading...</div>;
   if (isError || !comicsInfo) return <div>Error...</div>;
@@ -74,7 +74,12 @@ export const ComicsPage: React.FC = () => {
           )}
           {activeTab === 'Главы' && (
             <div className={styles.chapters}>
-              {/* Ваш код для отображения глав */}
+              {chapters.map((chapter) => (
+                <Link key={chapter.id} className={styles.chapter} to={`/reader/${chapter.id}`}>
+                  <div className={styles.chapterTitle}>{chapter.title}</div>
+                  <div className={styles.chapterDate}>{chapter.date}</div>
+                </Link>
+              ))}
             </div>
           )}
           {activeTab === 'Комментарии' && (
