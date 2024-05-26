@@ -2,62 +2,27 @@ import React from 'react';
 import { Carousel } from '../Carousel/Carousel';
 import { Card } from '../card/Card';
 import styles from '../../styles/HomePage.module.css';
+import { useGetTitleListQuery } from '../../store/NAMEInjects/GetComicsHomePage'; 
+import { Title } from '../../components/types/TitleListInterfaceTypes';
 
 export const HomePage: React.FC = () => {
-    const cardData = [
-        {
-            title: 'Абсолютный контроль',
-            rating: 8.1,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Великий учитель Онизука',
-            rating: 9.2,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Король школы',
-            rating: 8.5,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Абсолютный контроль',
-            rating: 8.1,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Великий учитель Онизука',
-            rating: 9.2,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Король школы',
-            rating: 8.5,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Абсолютный контроль',
-            rating: 8.1,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Великий учитель Онизука',
-            rating: 9.2,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        {
-            title: 'Король школы',
-            rating: 8.5,
-            imageUrl: 'https://remanga.org/media/titles/my-dad-is-too-strong/408c298182436aec21cd983f9f70f7b7.jpg'
-        },
-        // Добавьте еще карточки здесь
-    ];
+    const { data: titleListData, isLoading, isError } = useGetTitleListQuery(); // Использование хука для получения данных
+
+    if (isLoading) return <div>Loading...</div>; 
+    if (isError || !titleListData || !titleListData.titles) return <div>Error...</div>; 
 
     return (
         <div className={styles.page}>
             <Carousel>
-                {cardData.map((card, index) => (
-                    <Card key={index} title={card.title} rating={card.rating} imageUrl={card.imageUrl} />
+                {titleListData.titles.map((title: Title, index: number) => (
+                    <Card 
+                        key={index} 
+                        title={title.title} 
+                        type_of_work={title.type_of_work} 
+                        average_rating={title.average_rating} 
+                        imagetitle={title.imagetitle} 
+                        titleSlug={title.titleSlug} 
+                    />
                 ))}
             </Carousel>
         </div>

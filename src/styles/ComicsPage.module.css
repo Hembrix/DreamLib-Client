@@ -40,14 +40,6 @@
   background: #28a745;
 }
 
-.reportButton {
-  color: #007bff;
-  background: none;
-  border: none;
-  cursor: pointer;
-  margin-top: 10px;
-}
-
 .contentContainer {
   flex-grow: 1;
   margin-left: 260px; /* Adjust according to stickyContainer width */
@@ -97,4 +89,33 @@
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
+}
+
+.chapters {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+}
+
+.chapter {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+}
+
+.chapter:hover {
+  background-color: #f5f5f5;
+}
+
+.chapterTitle {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.chapterDate {
+  font-size: 0.9em;
+  color: #666;
 }
