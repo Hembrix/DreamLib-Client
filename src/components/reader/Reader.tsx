@@ -1,47 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Reader.css';
+import { useGetChapterQuery } from '../../store/NAMEInjects/GetChapter';
+import { Chapter } from '../types/ChapterInterface';
 
 const Reader: React.FC = () => {
-  const { chapterId } = useParams<{ chapterId: string }>();
-  const totalChapters: number = 5;
-  const pagesPerChapter: number = 11;
-  const [chapter, setChapter] = useState<number>(chapterId ? parseInt(chapterId, 10) : 1);
+  const { chapterId, titleSlug } = useParams<{ chapterId: string; titleSlug: string }>();
+  const totalChapters: number = 5;//ИСПРАВИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИИТЬ
+  const [chapter_number, setChapter] = useState<number>(chapterId ? parseInt(chapterId, 10) : 1);
   const [pages, setPages] = useState<string[]>([]);
 
+  const { data: chapterData, error, isLoading } = useGetChapterQuery({ titleSlug, chapterNumber: chapter_number.toString() });
+
   useEffect(() => {
-    if (chapterId) {
-      const chapterPages: string[] = [];
-      for (let i = 1; i <= pagesPerChapter; i++) {
-        chapterPages.push(`https://via.placeholder.com/600x800?text=Chapter${chapter}_Page${i}`);
-      }
+    if (chapterData) {
+      const chapterPages: string[] = chapterData.pages.map((page: Chapter) => page.image_data);
       setPages(chapterPages);
     }
-  }, [chapterId, chapter, pagesPerChapter]);
-  
+  }, [chapterData]);
 
   const handlePreviousChapter = () => {
-    if (chapter > 1) setChapter(chapter - 1);
+    if (chapter_number > 1) setChapter(chapter_number - 1);
   };
 
   const handleNextChapter = () => {
-    if (chapter < totalChapters) setChapter(chapter + 1);
+    if (chapter_number < totalChapters) setChapter(chapter_number + 1);
   };
 
   return (
     <div className="reader">
       <div className="reader-header">
-        <button onClick={handlePreviousChapter} disabled={chapter === 1}>
+        <button onClick={handlePreviousChapter} disabled={chapter_number === 1}>
           Предыдущая глава
         </button>
-        <span>Глава {chapter}</span>
-        <button onClick={handleNextChapter} disabled={chapter === totalChapters}>
+        <span>Глава {chapter_number}</span>
+        <button onClick={handleNextChapter} disabled={chapter_number === totalChapters}>
           Следующая глава
         </button>
       </div>
       <div className="reader-content">
-        {pages.map((page, index) => (
-          <img key={index} src={page} alt={`Глава ${chapter}, Страница ${index + 1}`} />
+        {isLoading && <div>Loading...</div>}
+        {error && <div>Error fetching chapter_number</div>}
+        {!isLoading && !error && chapterData && pages.map((page: string, index: number) => (
+          <img key={index} src={page} alt={`Глава ${chapter_number}, Страница ${index + 1}`} />
         ))}
       </div>
     </div>

@@ -3,22 +3,23 @@ import { useParams } from 'react-router-dom';
 import styles from '../../styles/ComicsPage.module.css';
 import { useGetTitleQuery } from '../../store/NAMEInjects/GetComicsInfo';
 import { Link } from 'react-router-dom';
-
-interface Chapter {
-  id: number;
-  title: string;
-  date: string; // Добавлено поле для даты
-}
+import { useGetChapterListQuery } from '../../store/NAMEInjects/GetChapterList';
+import { ChapterList } from '../types/ChapterListInterfaceTypes';
 
 export const ComicsPage: React.FC = () => {
   const { titleSlug } = useParams<{ titleSlug: string }>();
-  const { data: comicsInfo, isLoading, isError } = useGetTitleQuery(titleSlug);
+  const { data: comicsInfo, isLoading: isLoadingComics, isError: isErrorComics } = useGetTitleQuery(titleSlug);
+  const { data: chapterList, isLoading: isLoadingChapters, isError: isErrorChapters } = useGetChapterListQuery(titleSlug);
+
   const [activeTab, setActiveTab] = useState('Описание');
-  const [chapters] = useState<Chapter[]>([]); // Пока что нет данных о главах
 
+  if (isLoadingComics) {
+    return <div>Loading...</div>;
+  }
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError || !comicsInfo) return <div>Error...</div>;
+  if (isErrorComics) {
+    return <div>Error loading comic information.</div>;
+  }
 
   return (
     <div className={styles.container}>
@@ -37,25 +38,19 @@ export const ComicsPage: React.FC = () => {
       <div className={styles.contentContainer}>
         <div className={styles.tabs}>
           <button
-            className={`${styles.tabButton} ${
-              activeTab === 'Описание' ? styles.activeTabButton : ''
-            }`}
+            className={`${styles.tabButton} ${activeTab === 'Описание' ? styles.activeTabButton : ''}`}
             onClick={() => setActiveTab('Описание')}
           >
             Описание
           </button>
           <button
-            className={`${styles.tabButton} ${
-              activeTab === 'Главы' ? styles.activeTabButton : ''
-            }`}
+            className={`${styles.tabButton} ${activeTab === 'Главы' ? styles.activeTabButton : ''}`}
             onClick={() => setActiveTab('Главы')}
           >
             Главы
           </button>
           <button
-            className={`${styles.tabButton} ${
-              activeTab === 'Комментарии' ? styles.activeTabButton : ''
-            }`}
+            className={`${styles.tabButton} ${activeTab === 'Комментарии' ? styles.activeTabButton : ''}`}
             onClick={() => setActiveTab('Комментарии')}
           >
             Комментарии
@@ -66,7 +61,7 @@ export const ComicsPage: React.FC = () => {
             <div className={styles.description}>
               <p>{comicsInfo.description}</p>
               <div className={styles.tags}>
-                {comicsInfo.genres.map((genre, index) => (
+                {comicsInfo.genres.map((genre: string, index: number) => (
                   <span key={index} className={styles.tag}>{genre}</span>
                 ))}
               </div>
@@ -74,12 +69,20 @@ export const ComicsPage: React.FC = () => {
           )}
           {activeTab === 'Главы' && (
             <div className={styles.chapters}>
-              {chapters.map((chapter) => (
-                <Link key={chapter.id} className={styles.chapter} to={`/reader/${chapter.id}`}>
-                  <div className={styles.chapterTitle}>{chapter.title}</div>
-                  <div className={styles.chapterDate}>{chapter.date}</div>
-                </Link>
-              ))}
+              {isLoadingChapters && <div>Loading chapters...</div>}
+              {isErrorChapters && <div>Error loading chapters.</div>}
+              {chapterList?.chapters?.length ? (
+                chapterList.chapters.map((chapter: ChapterList) => (
+                  <Link key={chapter.chapter_number} className={styles.chapter} to={`/comics/${titleSlug}/${chapter.chapter_number}`}>
+                    <div className={styles.chapterTitle}>
+                      <span>Глава </span>{chapter.chapter_number}
+                    </div>
+                    <div className={styles.chapterDate}>{chapter.upload_date}</div>
+                  </Link>
+                ))
+              ) : (
+                <div>No chapters available.</div>
+              )}
             </div>
           )}
           {activeTab === 'Комментарии' && (
