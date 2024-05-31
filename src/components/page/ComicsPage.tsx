@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from '../../styles/ComicsPage.module.css';
-import { useGetTitleQuery } from '../../store/NAMEInjects/GetComicsInfo';
+import { useGetTitleQuery } from '../../store/dreamLibInjects/GetComicsInfo';
 import { Link } from 'react-router-dom';
-import { useGetChapterListQuery } from '../../store/NAMEInjects/GetChapterList';
+import { useGetChapterListQuery } from '../../store/dreamLibInjects/GetChapterList';
 import { ChapterList } from '../types/ChapterListInterfaceTypes';
 
 export const ComicsPage: React.FC = () => {

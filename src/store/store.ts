@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { getTitleListApi } from "./NAMEInjects/GetComicsHomePage";
-import { getTitleApi } from "./NAMEInjects/GetComicsInfo";
-import { getChapterListApi } from "./NAMEInjects/GetChapterList";
-import { getChapterApi } from "./NAMEInjects/GetChapter";
+import { getTitleListApi } from "./dreamLibInjects/GetComicsHomePage";
+import { getTitleApi } from "./dreamLibInjects/GetComicsInfo";
+import { getChapterListApi } from "./dreamLibInjects/GetChapterList";
+import { getChapterApi } from "./dreamLibInjects/GetChapter";
 
 export const store = configureStore({
     reducer: {

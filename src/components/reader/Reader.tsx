@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import './Reader.css';
-import { useGetChapterQuery } from '../../store/NAMEInjects/GetChapter';
+import { useGetChapterQuery } from '../../store/dreamLibInjects/GetChapter';
 import { Chapter } from '../types/ChapterInterface';
 
 const Reader: React.FC = () => {

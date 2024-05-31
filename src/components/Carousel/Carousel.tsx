@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../styles/Carousel.module.css';
+import styles from './Carousel.module.css';
 
 interface CarouselProps {
     children: React.ReactNode;

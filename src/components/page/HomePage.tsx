@@ -2,11 +2,11 @@ import React from 'react';
 import { Carousel } from '../Carousel/Carousel';
 import { Card } from '../card/Card';
 import styles from '../../styles/HomePage.module.css';
-import { useGetTitleListQuery } from '../../store/NAMEInjects/GetComicsHomePage'; 
+import { useGetTitleListQuery } from '../../store/dreamLibInjects/GetComicsHomePage'; 
 import { Title } from '../../components/types/TitleListInterfaceTypes';
 
 export const HomePage: React.FC = () => {
-    const { data: titleListData, isLoading, isError } = useGetTitleListQuery(); // Использование хука для получения данных
+    const { data: titleListData, isLoading, isError } = useGetTitleListQuery(); 
 
     if (isLoading) return <div>Loading...</div>; 
     if (isError || !titleListData || !titleListData.titles) return <div>Error...</div>; 
