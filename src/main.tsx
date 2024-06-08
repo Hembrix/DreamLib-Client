@@ -9,6 +9,8 @@ import { CatalogPage } from './components/page/CatalogPage';
 import { Footer } from './components/footer/Footer';
 import { ComicsPage } from './components/page/ComicsPage';
 import Reader from './components/reader/Reader';
+import { TitleManagement } from './components/TitleManagement/TitleManagament';
+import { AuthPage } from './components/page/AuthPage';
 
 
 
@@ -21,6 +23,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/catalog" element={<CatalogPage/>}/>
           <Route path="/comics/:titleSlug" element={<ComicsPage/>}/>
           <Route path="/comics/:titleSlug/:chapter_id" element={<Reader/>} />
+          <Route path="/titleManagement" element={<TitleManagement/>} />
+          <Route path="/auth" element={<AuthPage/>} />
         </Routes>
         <Footer/>
       </Router>

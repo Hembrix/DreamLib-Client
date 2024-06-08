@@ -1,12 +1,8 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "../../components/utils/baseUrl";
 
-export const getTitleApi = createApi({
-  reducerPath: 'getTitleApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'http://127.0.0.1:8000'
-  }),
-  endpoints: build => ({
-    GetTitle: build.query({
+export const api = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    GetTitle: builder.query({
       query: (titleSlug) => ({
         url: `api/manga/${titleSlug}/`
       })
@@ -14,4 +10,6 @@ export const getTitleApi = createApi({
   })    
 })
 
-export const { useGetTitleQuery } = getTitleApi;
+export const { 
+  useGetTitleQuery 
+} = api;

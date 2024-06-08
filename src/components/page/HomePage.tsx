@@ -16,13 +16,13 @@ export const HomePage: React.FC = () => {
             <Carousel>
                 {titleListData.titles.map((title: Title, index: number) => (
                     <Card 
-                        key={index} 
-                        title={title.title} 
-                        type_of_work={title.type_of_work} 
-                        average_rating={title.average_rating} 
-                        imagetitle={title.imagetitle} 
+                        key={index}
+                        title={title.title}
+                        type_of_work={title.type_of_work}
+                        average_rating={title.average_rating}
+                        imagetitle={title.imagetitle}
                         titleSlug={title.titleSlug} 
-                    />
+                        TitleName={title.TitleName}                    />
                 ))}
             </Carousel>
         </div>

@@ -5,6 +5,7 @@ import { useGetTitleQuery } from '../../store/dreamLibInjects/GetComicsInfo';
 import { Link } from 'react-router-dom';
 import { useGetChapterListQuery } from '../../store/dreamLibInjects/GetChapterList';
 import { ChapterList } from '../types/ChapterListInterfaceTypes';
+import { BASE_URL } from '../utils/baseUrl';
 
 export const ComicsPage: React.FC = () => {
   const { titleSlug } = useParams<{ titleSlug: string }>();
@@ -25,7 +26,7 @@ export const ComicsPage: React.FC = () => {
     <div className={styles.container}>
       <div className={styles.stickyContainer}>
         <img
-          src={comicsInfo.imagetitle}
+          src={`${BASE_URL}${comicsInfo.imagetitle}`}
           alt={comicsInfo.title}
           className={styles.image}
         />

@@ -1,12 +1,8 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { baseApi } from "../../components/utils/baseUrl";
 
-export const getChapterListApi = createApi({
-  reducerPath: 'getChapterListApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'http://127.0.0.1:8000'
-  }),
-  endpoints: build => ({
-    getChapterList: build.query({
+export const api = baseApi.injectEndpoints({
+  endpoints: (builder) => ({
+    getChapterList: builder.query({
       query: (titleSlug) => ({
         url: `api/chapters/${titleSlug}/`
       })
@@ -14,5 +10,5 @@ export const getChapterListApi = createApi({
   })    
 })
 
-export const { useGetChapterListQuery } = getChapterListApi;
+export const { useGetChapterListQuery } = api;
 

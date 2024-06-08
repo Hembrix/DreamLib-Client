@@ -13,7 +13,7 @@
   .modalContent {
     background: #2c2c2c;
     border-radius: 10px;
-    padding: 40px;
+    padding: 20px;
     width: 400px;
     max-width: 90%;
   }
@@ -49,9 +49,7 @@
     background: none;
     border: none;
     color: white;
-    font-size: 24px;
-    position: absolute;
-    top: 20px;
-    right: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;  
     cursor: pointer;
   }
