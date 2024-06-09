@@ -1,13 +1,10 @@
-
 import { baseApi } from "../../components/utils/baseUrl";
 import { Title } from '../../components/types/TitleListInterfaceTypes';
 
-
-
 export const api = baseApi.injectEndpoints({
-    endpoints: (builder) => ({
+  endpoints: (builder) => ({
     searchTitles: builder.query<Title[], string>({
-      query: (searchTerm) => `search/?q=${searchTerm}`,
+      query: (searchTerm) => `api/search/?q=${searchTerm}`,
     }),
   }),
 });

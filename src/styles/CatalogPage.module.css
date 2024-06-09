@@ -1,5 +1,4 @@
 .catalogContainer {
-  
   display: flex;
 }
 
@@ -15,28 +14,72 @@
 .catalog {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start; /* Измените на flex-start */
+  justify-content: flex-start;
   margin-right: 300px;
 }
 
-
-
-
 .filter {
   margin-bottom: 10px;
+}
+
+.inputField {
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .item {
   border: 1px solid #ddd;
   padding: 10px;
   margin-bottom: 10px;
+  width: calc(33.33% - 20px); /* Three items per row */
+  margin-right: 10px;
+  margin-left: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
 }
 
 .title {
   font-size: 1.5em;
   margin-bottom: 10px;
+  color: #333;
 }
 
 .info {
   margin-bottom: 5px;
+  color: #666;
+}
+
+.loading,
+.error {
+  font-size: 1.5em;
+  text-align: center;
+  margin-top: 50px;
+  color: #999;
+}
+
+@media (max-width: 768px) {
+  .filters {
+    position: static;
+    width: 100%;
+    margin: 20px 0;
+  }
+
+  .catalog {
+    margin-right: 0;
+  }
+
+  .item {
+    width: calc(50% - 20px); /* Two items per row */
+  }
+}
+
+@media (max-width: 480px) {
+  .item {
+    width: calc(100% - 20px); /* One item per row */
+  }
 }

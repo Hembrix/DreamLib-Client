@@ -1,8 +1,9 @@
-// src/components/SearchModal.tsx
-import React, { useState } from 'react';
-import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResult'
+import React, { useState, useEffect } from 'react';
+import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResult';
 import styles from './SearchModal.module.css';
 import { Link } from 'react-router-dom';
+import { BASE_URL } from '../utils/baseUrl';
+import { Title } from '../types/TitleListInterfaceTypes';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -15,12 +16,23 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
     skip: !searchQuery,
   });
 
+  useEffect(() => {
+    if (!isOpen) {
+      setSearchQuery(''); // Сбрасываем состояние при закрытии модального окна
+    }
+  }, [isOpen]);
+
+  const handleClose = () => {
+    setSearchQuery(''); // Сбрасываем состояние поиска
+    onClose(); // Вызываем onClose из пропсов
+  };
+
   if (!isOpen) return null;
 
   return (
     <div className={styles.modalOverlay}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={onClose}>&times;</button>
+        <button className={styles.closeButton} onClick={handleClose}>&times;</button>
         <input
           type="text"
           className={styles.searchInput}
@@ -32,10 +44,10 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
           <div>Loading...</div>
         ) : (
           <div>
-            {searchResults.map(result => (
-              <Link to={`/comics/${result.titleSlug}`} key={result.titleSlug} className={styles.resultItem}>
-                <img src={result.imagetitle} alt={result.TitleName} />
-                <div className={styles.resultText}>{result.TitleName}</div>
+            {searchResults.map((result: Title, index) => (
+              <Link to={`/comics/${result.titleSlug}`} key={index} className={styles.resultItem}>
+                <img src={`${BASE_URL}${result.imagetitle}`} alt={result.title} />
+                <div className={styles.resultText}>{result.title}</div>
               </Link>
             ))}
           </div>

@@ -21,8 +21,8 @@ export const HomePage: React.FC = () => {
                         type_of_work={title.type_of_work}
                         average_rating={title.average_rating}
                         imagetitle={title.imagetitle}
-                        titleSlug={title.titleSlug} 
-                        TitleName={title.TitleName}                    />
+                        titleSlug={title.titleSlug}           
+                    />
                 ))}
             </Carousel>
         </div>

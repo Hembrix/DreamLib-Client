@@ -1,44 +1,72 @@
 import React, { useState } from 'react';
-import Select from 'react-select';
+import Select, { MultiValue } from 'react-select';
 import styles from '../../styles/CatalogPage.module.css';
 import { Card } from '../card/Card';
 import { useGetCatalogQuery } from '../../store/dreamLibInjects/GetCatalogQuery';
 import { FilterParams } from '../types/FilterTitles';
 import { Title } from '../types/TitleListInterfaceTypes';
 
+const typeOptions = [
+  { value: 'Манга', label: 'Манга' },
+  { value: 'Манхва', label: 'Манхва' },
+  { value: 'Маньхуа', label: 'Маньхуа' },
+  { value: 'Западный комикс', label: 'Западный комикс' },
+  { value: 'Рукомикс', label: 'Рукомикс' },
+  { value: 'Индонезийский комикс', label: 'Индонезийский комикс' },
+  { value: 'Другое', label: 'Другое' },
+  { value: 'Манга', label: 'Манга' },
+  { value: 'Манхва', label: 'Манхва' },
+  { value: 'Маньхуа', label: 'Маньхуа' },
+  { value: 'Западный комикс', label: 'Западный комикс' },
+  { value: 'Рукомикс', label: 'Рукомикс' },
+  { value: 'Индонезийский комикс', label: 'Индонезийский комикс' },
+  { value: 'Другое', label: 'Другое' },
+  { value: 'Манга', label: 'Манга' },
+  { value: 'Манхва', label: 'Манхва' },
+  { value: 'Маньхуа', label: 'Маньхуа' },
+  { value: 'Западный комикс', label: 'Западный комикс' },
+  { value: 'Рукомикс', label: 'Рукомикс' },
+  { value: 'Индонезийский комикс', label: 'Индонезийский комикс' },
+  { value: 'Другое', label: 'Другое' },
+];
+
 const genreOptions = [
-  { value: null, label: 'Не выбрано' },
   { value: 'Фэнтези', label: 'Фэнтези' },
   { value: 'Насилие', label: 'Насилие' },
   // Добавьте больше опций здесь...
 ];
 
-const typeOptions = [
-  { value: null, label: 'Не выбрано' },
-  { value: 'Манга', label: 'Манга' },
-  { value: 'Аниме', label: 'Аниме' },
-  // Добавьте больше опций здесь...
-];
-
 const projectStatusOptions = [
-  { value: null, label: 'Не выбрано' },
   { value: 'Завершен', label: 'Завершен' },
   { value: 'В процессе', label: 'В процессе' },
   // Добавьте больше опций здесь...
 ];
 
 const translationStatusOptions = [
-  { value: null, label: 'Не выбрано' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
+  { value: 'Завершен', label: 'Завершен' },
+  { value: 'В процессе', label: 'В процессе' },
   { value: 'Завершен', label: 'Завершен' },
   { value: 'В процессе', label: 'В процессе' },
   // Добавьте больше опций здесь...
 ];
 
 export const CatalogPage: React.FC = () => {
-  const [genreFilter, setGenreFilter] = useState<string | null>(null);
-  const [typeFilter, setTypeFilter] = useState<string | null>(null);
-  const [projectStatusFilter, setProjectStatusFilter] = useState<string | null>(null);
-  const [translationStatusFilter, setTranslationStatusFilter] = useState<string | null>(null);
+  const [typeFilter, setTypeFilter] = useState<string[]>([]);
+  const [genreFilter, setGenreFilter] = useState<string[]>([]);
+  const [projectStatusFilter, setProjectStatusFilter] = useState<string[]>([]);
+  const [translationStatusFilter, setTranslationStatusFilter] = useState<string[]>([]);
   const [minRatingFilter, setMinRatingFilter] = useState<string | null>(null);
   const [maxRatingFilter, setMaxRatingFilter] = useState<string | null>(null);
   const [minYearFilter, setMinYearFilter] = useState<string | null>(null);
@@ -47,10 +75,10 @@ export const CatalogPage: React.FC = () => {
   const [maxChaptersFilter, setMaxChaptersFilter] = useState<string | null>(null);
 
   const filterParams: FilterParams = {
-    title_types: typeFilter ? [typeFilter] : undefined,
-    genres: genreFilter ? [genreFilter] : undefined,
-    status: projectStatusFilter || undefined,
-    translation_status: translationStatusFilter || undefined,
+    title_types: typeFilter.length ? typeFilter : undefined,
+    genres: genreFilter.length ? genreFilter : undefined,
+    status: projectStatusFilter.length ? projectStatusFilter : undefined,
+    translation_status: translationStatusFilter.length ? translationStatusFilter : undefined,
     min_rating: minRatingFilter ? parseFloat(minRatingFilter) : undefined,
     max_rating: maxRatingFilter ? parseFloat(maxRatingFilter) : undefined,
     min_year: minYearFilter ? parseInt(minYearFilter) : undefined,
@@ -61,46 +89,55 @@ export const CatalogPage: React.FC = () => {
 
   const { data: catalogData, error, isLoading } = useGetCatalogQuery(filterParams);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading catalog</div>;
+  const handleMultiSelectChange = (setState: React.Dispatch<React.SetStateAction<string[]>>, selectedOptions: MultiValue<{ value: string; label: string }>) => {
+    setState(selectedOptions.map(option => option.value));
+  };
+
+  if (isLoading) return <div className={styles.loading}>Loading...</div>;
+  if (error) return <div className={styles.error}>Error loading catalog</div>;
 
   return (
     <div className={styles.catalogContainer}>
       <div className={styles.filters}>
-        <Select
-          className={styles.filter}
-          options={genreOptions}
-          isSearchable
-          placeholder="Выберите жанр..."
-          defaultValue={genreOptions[0]}
-          onChange={selectedOption => setGenreFilter(selectedOption ? selectedOption.value : null)}
-        />
+        <p>Тип произведения</p>
         <Select
           className={styles.filter}
           options={typeOptions}
+          isMulti
           isSearchable
           placeholder="Выберите тип..."
-          defaultValue={typeOptions[0]}
-          onChange={selectedOption => setTypeFilter(selectedOption ? selectedOption.value : null)}
+          onChange={(selectedOptions) => handleMultiSelectChange(setTypeFilter, selectedOptions)}
         />
+        <p>Жанр</p>
+        <Select
+          className={styles.filter}
+          options={genreOptions}
+          isMulti
+          isSearchable
+          placeholder="Выберите жанр..."
+          onChange={(selectedOptions) => handleMultiSelectChange(setGenreFilter, selectedOptions)}
+        />
+        <p>Статус проекта</p>
         <Select
           className={styles.filter}
           options={projectStatusOptions}
+          isMulti
           isSearchable
           placeholder="Выберите статус проекта..."
-          defaultValue={projectStatusOptions[0]}
-          onChange={selectedOption => setProjectStatusFilter(selectedOption ? selectedOption.value : null)}
+          onChange={(selectedOptions) => handleMultiSelectChange(setProjectStatusFilter, selectedOptions)}
         />
+        <p>Статус перевода</p>
         <Select
           className={styles.filter}
           options={translationStatusOptions}
+          isMulti
           isSearchable
           placeholder="Выберите статус перевода..."
-          defaultValue={translationStatusOptions[0]}
-          onChange={selectedOption => setTranslationStatusFilter(selectedOption ? selectedOption.value : null)}
+          onChange={(selectedOptions) => handleMultiSelectChange(setTranslationStatusFilter, selectedOptions)}
         />
+        <p>Рейтинг произведения</p>
         <input
-          className={styles.filter}
+          className={styles.inputField}
           type="number"
           step="0.1"
           placeholder="Минимальный рейтинг"
@@ -108,15 +145,16 @@ export const CatalogPage: React.FC = () => {
           onChange={e => setMinRatingFilter(e.target.value)}
         />
         <input
-          className={styles.filter}
+          className={styles.inputField}
           type="number"
           step="0.1"
           placeholder="Максимальный рейтинг"
           value={maxRatingFilter ?? ''}
           onChange={e => setMaxRatingFilter(e.target.value)}
         />
+        <p>Год произведения</p>
         <input
-          className={styles.filter}
+          className={styles.inputField}
           type="number"
           step="1"
           placeholder="Минимальный год"
@@ -124,13 +162,14 @@ export const CatalogPage: React.FC = () => {
           onChange={e => setMinYearFilter(e.target.value)}
         />
         <input
-          className={styles.filter}
+          className={styles.inputField}
           type="number"
           step="1"
           placeholder="Максимальный год"
           value={maxYearFilter ?? ''}
           onChange={e => setMaxYearFilter(e.target.value)}
         />
+        <p>Количество глав</p>
         <input
           className={styles.inputField}
           type="number"
@@ -156,11 +195,10 @@ export const CatalogPage: React.FC = () => {
             type_of_work={item.type_of_work}
             average_rating={item.average_rating}
             imagetitle={item.imagetitle}
-            titleSlug={item.titleSlug} 
-            TitleName={item.TitleName}          
+            titleSlug={item.titleSlug}         
           />
         ))}
       </div>
     </div>
   );
-}
+};
