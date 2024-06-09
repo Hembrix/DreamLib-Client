@@ -3,64 +3,9 @@ import Select, { MultiValue } from 'react-select';
 import styles from '../../styles/CatalogPage.module.css';
 import { Card } from '../card/Card';
 import { useGetCatalogQuery } from '../../store/dreamLibInjects/GetCatalogQuery';
+import { useGetFiltersQuery } from '../../store/dreamLibInjects/GetFilter';
 import { FilterParams } from '../types/FilterTitles';
 import { Title } from '../types/TitleListInterfaceTypes';
-
-const typeOptions = [
-  { value: 'Манга', label: 'Манга' },
-  { value: 'Манхва', label: 'Манхва' },
-  { value: 'Маньхуа', label: 'Маньхуа' },
-  { value: 'Западный комикс', label: 'Западный комикс' },
-  { value: 'Рукомикс', label: 'Рукомикс' },
-  { value: 'Индонезийский комикс', label: 'Индонезийский комикс' },
-  { value: 'Другое', label: 'Другое' },
-  { value: 'Манга', label: 'Манга' },
-  { value: 'Манхва', label: 'Манхва' },
-  { value: 'Маньхуа', label: 'Маньхуа' },
-  { value: 'Западный комикс', label: 'Западный комикс' },
-  { value: 'Рукомикс', label: 'Рукомикс' },
-  { value: 'Индонезийский комикс', label: 'Индонезийский комикс' },
-  { value: 'Другое', label: 'Другое' },
-  { value: 'Манга', label: 'Манга' },
-  { value: 'Манхва', label: 'Манхва' },
-  { value: 'Маньхуа', label: 'Маньхуа' },
-  { value: 'Западный комикс', label: 'Западный комикс' },
-  { value: 'Рукомикс', label: 'Рукомикс' },
-  { value: 'Индонезийский комикс', label: 'Индонезийский комикс' },
-  { value: 'Другое', label: 'Другое' },
-];
-
-const genreOptions = [
-  { value: 'Фэнтези', label: 'Фэнтези' },
-  { value: 'Насилие', label: 'Насилие' },
-  // Добавьте больше опций здесь...
-];
-
-const projectStatusOptions = [
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  // Добавьте больше опций здесь...
-];
-
-const translationStatusOptions = [
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  { value: 'Завершен', label: 'Завершен' },
-  { value: 'В процессе', label: 'В процессе' },
-  // Добавьте больше опций здесь...
-];
 
 export const CatalogPage: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
@@ -87,14 +32,23 @@ export const CatalogPage: React.FC = () => {
     max_chapters: maxChaptersFilter ? parseInt(maxChaptersFilter) : undefined,
   };
 
-  const { data: catalogData, error, isLoading } = useGetCatalogQuery(filterParams);
+  const { data: catalogData, error: catalogError, isLoading: catalogLoading } = useGetCatalogQuery(filterParams);
+  const { data: filtersData, error: filtersError, isLoading: filtersLoading } = useGetFiltersQuery();
 
-  const handleMultiSelectChange = (setState: React.Dispatch<React.SetStateAction<string[]>>, selectedOptions: MultiValue<{ value: string; label: string }>) => {
+  const handleMultiSelectChange = (
+    setState: React.Dispatch<React.SetStateAction<string[]>>, 
+    selectedOptions: MultiValue<{ value: string; label: string; }>
+  ) => {
     setState(selectedOptions.map(option => option.value));
   };
 
-  if (isLoading) return <div className={styles.loading}>Loading...</div>;
-  if (error) return <div className={styles.error}>Error loading catalog</div>;
+  if (catalogLoading || filtersLoading) return <div className={styles.loading}>Loading...</div>;
+  if (catalogError || filtersError) return <div className={styles.error}>Error loading data</div>;
+
+  const typeOptions = filtersData?.types_of_work.map(type => ({ value: type, label: type })) ?? [];
+  const genreOptions = filtersData?.genres.map(genre => ({ value: genre, label: genre })) ?? [];
+  const projectStatusOptions = filtersData?.status.map(status => ({ value: status, label: status })) ?? [];
+  const translationStatusOptions = filtersData?.translation_status.map(status => ({ value: status, label: status })) ?? [];
 
   return (
     <div className={styles.catalogContainer}>
@@ -195,7 +149,7 @@ export const CatalogPage: React.FC = () => {
             type_of_work={item.type_of_work}
             average_rating={item.average_rating}
             imagetitle={item.imagetitle}
-            titleSlug={item.titleSlug}         
+            titleSlug={item.titleSlug}
           />
         ))}
       </div>

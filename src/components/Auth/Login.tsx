@@ -1,36 +1,48 @@
 import React, { useState } from 'react';
 import { useLoginMutation } from '../../store/dreamLibInjects/auth';
 
-export const AuthForm: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+interface AuthFormProps {
+  onClose: () => void;
+}
 
-  const [login, { isLoading, isError }] = useLoginMutation();
+const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
+  const [Username, setUsername] = useState('');
+  const [Password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const [login] = useLoginMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setIsError(false);
     try {
-      await login({ username, password }).unwrap();
+      await login({ Username, Password }).unwrap();
       console.log('Login successful');
+      onClose(); // Закрываем модальное окно после успешной аутентификации
     } catch (error) {
       console.error('Error during login:', error);
+      setIsError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Username:
-        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <input type="text" placeholder="Логин/Email" value={Username} onChange={(e) => setUsername(e.target.value)} />
       </label>
       <br />
       <label>
-        Password:
-        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input type="Password" placeholder="Пароль" value={Password} onChange={(e) => setPassword(e.target.value)} />
       </label>
       <br />
-      <button type="submit" disabled={isLoading}>Login</button>
-      {isError && <div>Login failed</div>}
+      <button type="submit" disabled={isLoading}>Авторизация</button>
+      {isError && <div>Ошибка авторизации</div>}
     </form>
   );
 };
+
+export default AuthForm;
