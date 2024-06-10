@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
+import bcrypt from 'bcryptjs';
 import { useRegisterMutation } from '../../store/dreamLibInjects/auth';
+
+const fixedSalt = '$2a$10$w6.wqJqDsGh9FQHI28BuXe';  // фиксированная соль
 
 interface RegisterFormProps {
   onClose: () => void;
@@ -20,6 +23,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
     e.preventDefault();
     setIsLoading(true);
     setIsError(false);
+
     if (password !== confirmPassword) {
       setErrorMessage('Пароли не совпадают');
       setIsLoading(false);
@@ -27,14 +31,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
     }
 
     try {
-      await register({ username, email, password }).unwrap();
+      const hashedPassword = bcrypt.hashSync(password, fixedSalt);
+      console.log('Hashed Password:', hashedPassword);
+
+      await register({ username, email, password: hashedPassword }).unwrap();
       console.log('Registration successful');
-      // Очистить поля после успешной регистрации
+
       setUsername('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      onClose(); // Закрываем модальное окно после успешной регистрации
+      onClose();
     } catch (error) {
       console.error('Error during registration:', error);
       setIsError(true);
@@ -54,7 +61,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
         <input type="email" placeholder="Почта" value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <br />
-      <label> 
+      <label>
         <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
       </label>
       <br />

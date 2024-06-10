@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useLoginMutation } from '../../store/dreamLibInjects/auth';
+import bcrypt from 'bcryptjs';
+
+const fixedSalt = '$2a$10$w6.wqJqDsGh9FQHI28BuXe';  // фиксированная соль
 
 interface AuthFormProps {
   onClose: () => void;
@@ -17,10 +20,15 @@ const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
     e.preventDefault();
     setIsLoading(true);
     setIsError(false);
+
     try {
-      await login({ username, password }).unwrap();
+      const hashedPassword = bcrypt.hashSync(password, fixedSalt);
+      console.log('Хэшированный пароль:', hashedPassword);
+
+      const response = await login({ username, password: hashedPassword }).unwrap();
+      localStorage.setItem('authData', JSON.stringify(response));
       console.log('Login successful');
-      onClose(); // Закрываем модальное окно после успешной аутентификации
+      onClose();
     } catch (error) {
       console.error('Error during login:', error);
       setIsError(true);

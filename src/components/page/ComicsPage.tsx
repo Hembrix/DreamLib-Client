@@ -110,3 +110,4 @@ export const ComicsPage: React.FC = () => {
     </div>
   );
 };
+

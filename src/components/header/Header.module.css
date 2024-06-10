@@ -1,60 +1,75 @@
 .headerContainer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    background-color: #fef3e2; /* Цвет фона, соответствующий изображению */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #fef3e2; /* Цвет фона, соответствующий изображению */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navLink {
+  color: #333;
+  text-decoration: none;
+  font-size: 16px;
+  margin: 0 10px;
+}
+
+.navigationLinks {
+  display: flex;
+  align-items: center;
+}
+
+.extraControls {
+  display: flex;
+  align-items: center;
+}
+
+.searchButton, .bookmarksButton, .authenticationButton, .themeToggle {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+.searchButton:hover, .bookmarksButton:hover, .authenticationButton:hover, .themeToggle:hover {
+  color: #ff7a00;
+}
+.mobileNav {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #fef3e2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mobileNav {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  background-color: #fef3e2;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 767px) {
+  .navigationLinks {
+    display: none;
   }
-  
-  .navLink {
-    color: #333;
-    text-decoration: none;
-    font-size: 16px;
-    margin: 0 10px;
-  }
-  
+}
+
+@media screen and (min-width: 768px) {
   .navigationLinks {
     display: flex;
     align-items: center;
   }
-  
+
   .extraControls {
     display: flex;
     align-items: center;
   }
-  
-  .searchButton, .bookmarksButton, .authenticationButton, .themeToggle {
-    background: none;
-    border: none;
-    color: #333;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 0 10px;
+
+  .mobileNav {
+    display: none; /* скрыть на десктопе */
   }
-  
-  .searchButton:hover, .bookmarksButton:hover, .authenticationButton:hover, .themeToggle:hover {
-    color: #ff7a00;
-  }
-  
-  .darkMode {
-    background-color: #333;
-    color: #fef3e2;
-  }
-  
-  .darkMode .navLink, 
-  .darkMode .searchButton, 
-  .darkMode .bookmarksButton, 
-  .darkMode .authenticationButton, 
-  .darkMode .themeToggle {
-    color: #fef3e2;
-  }
-  
-  .darkMode .navLink:hover, 
-  .darkMode .searchButton:hover, 
-  .darkMode .bookmarksButton:hover, 
-  .darkMode .authenticationButton:hover, 
-  .darkMode .themeToggle:hover {
-    color: #ff7a00;
-  }
-  
+}

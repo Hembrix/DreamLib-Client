@@ -1,16 +1,39 @@
 import { baseApi } from "../../components/utils/baseUrl";
 
+interface RegisterResponse {
+  user: { username: string; email: string };
+  refresh: string;
+  access: string;
+}
+
+interface LoginResponse {
+  user: { username: string; email: string };
+  refresh: string;
+  access: string;
+}
+
+interface RegisterRequest {
+  username: string;
+  email: string;
+  password: string;
+}
+
+interface LoginRequest {
+  username: string;
+  password: string;
+}
+
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation({
-      query: (formData: { username: string; email: string; password: string }) => ({
+    register: builder.mutation<RegisterResponse, RegisterRequest>({
+      query: (formData) => ({
         url: 'api/register/',
         method: 'POST',
         body: formData,
       }),
     }),
-    login: builder.mutation({
-      query: (formData: { username: string; password: string }) => ({
+    login: builder.mutation<LoginResponse, LoginRequest>({
+      query: (formData) => ({
         url: 'api/login/',
         method: 'POST',
         body: formData,
