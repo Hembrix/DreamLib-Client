@@ -13,10 +13,7 @@ export const Card: React.FC<Title> = ({ imagetitle, title, titleSlug, type_of_wo
                 <img src={`${BASE_URL}${imagetitle}`} alt={'Обложка'} className={styles.image} />
             </div>
             <p className={styles.subtitle}>
-               <span className={styles.rating}>{type_of_work}</span>
-            </p>
-            <p className={styles.subtitle}>
-                <span className={styles.rating}>{average_rating} ★</span>
+               <span className={styles.rating}>{type_of_work} <span className={styles.rating}>{average_rating} ★</span> </span> 
             </p>
             <h2 className={styles.title}>{title}</h2>
         </Link>

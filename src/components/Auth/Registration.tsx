@@ -6,9 +6,9 @@ interface RegisterFormProps {
 }
 
 const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [Username, setUsername] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -20,14 +20,14 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
     e.preventDefault();
     setIsLoading(true);
     setIsError(false);
-    if (password !== confirmPassword) {
+    if (Password !== confirmPassword) {
       setErrorMessage('Пароли не совпадают');
       setIsLoading(false);
       return;
     }
 
     try {
-      await register({ username, email, password }).unwrap();
+      await register({ Username, Email, Password }).unwrap();
       console.log('Registration successful');
       // Очистить поля после успешной регистрации
       setUsername('');
@@ -47,19 +47,19 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        <input type="text" placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <input type="text" placeholder="Логин" value={Username} onChange={(e) => setUsername(e.target.value)} />
       </label>
       <br />
       <label>
-        <input type="email" placeholder="Почта" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <input type="Email" placeholder="Почта" value={Email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <br />
       <label> 
-        <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input type="Password" placeholder="Пароль" value={Password} onChange={(e) => setPassword(e.target.value)} />
       </label>
       <br />
       <label>
-        <input type="password" placeholder="Подтвердите пароль" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+        <input type="Password" placeholder="Подтвердите пароль" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
       </label>
       <br />
       <button type="submit" disabled={isLoading}>Регистрация</button>

@@ -1,85 +1,65 @@
 .catalogContainer {
   display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.mainContent {
+  display: flex;
+  gap: 20px;
 }
 
 .filters {
-  margin-top: 100px;
-  position: fixed;
-  right: 0;
-  width: 200px;
-  top: 20px; /* Adjust this value as needed */
-  margin-right: 20px;
-}
-
-.catalog {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  margin-right: 300px;
+  flex-direction: column;
+  width: 250px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
 .filter {
   margin-bottom: 10px;
 }
 
+.filterSection {
+  margin-bottom: 20px;
+}
+
 .inputField {
   margin-bottom: 10px;
-  width: 100%;
   padding: 5px;
+  width: calc(50% - 10px);
   border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box;
+  border-radius: 8px;
+  outline: none;
 }
 
-.item {
-  border: 1px solid #ddd;
-  padding: 10px;
-  margin-bottom: 10px;
-  width: calc(33.33% - 20px); /* Three items per row */
-  margin-right: 10px;
-  margin-left: 10px;
-  border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+.inputFieldContainer {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-.title {
-  font-size: 1.5em;
-  margin-bottom: 10px;
-  color: #333;
+.inputField p {
+  margin: 0 0 5px 0;
+  font-weight: bold;
 }
 
-.info {
-  margin-bottom: 5px;
-  color: #666;
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  flex: 1;
 }
 
-.loading,
-.error {
-  font-size: 1.5em;
+.loading, .error {
   text-align: center;
   margin-top: 50px;
-  color: #999;
 }
 
-@media (max-width: 768px) {
-  .filters {
-    position: static;
-    width: 100%;
-    margin: 20px 0;
-  }
-
-  .catalog {
-    margin-right: 0;
-  }
-
-  .item {
-    width: calc(50% - 20px); /* Two items per row */
-  }
-}
-
-@media (max-width: 480px) {
-  .item {
-    width: calc(100% - 20px); /* One item per row */
-  }
+h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
 }

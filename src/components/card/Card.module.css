@@ -1,6 +1,6 @@
 .card {
+    text-decoration: none;
     border-radius: 8px;
-    padding: 8px;
     width: 200px;
     height: 400px;
     text-align: center;
@@ -27,7 +27,6 @@
 }
 .title {
     font-size: 1.2rem; 
-    margin: 8px 0 0 0;
     font-weight: bold;
     color: #000000;
     height: 40px;
@@ -35,18 +34,21 @@
     word-wrap: break-word;
     overflow-wrap: break-word;
     white-space: normal;
+    font-weight:normal;
 }
 .subtitle {
     margin: 0;
-    color: #443d3dc1;
+    color: #808080;
     font-size: 1rem;
     height: 20px;
 }
 .rating {
-    color: #ffcc00;
+    margin: 0;
+    color: #808080;
     font-size: 1rem;
     height: 20px;
 }
+
 
 @media (max-width: 768px) {
     .card {
@@ -58,19 +60,5 @@
     }
     .subtitle, .rating {
         font-size: 0.9rem; 
-    }
-}
-
-@media (max-width: 480px) {
-    .card {
-        width: 100px;
-        height: 200px;
-        padding: 4px;
-    }
-    .title {
-        font-size: 0.8rem; 
-    }
-    .subtitle, .rating {
-        font-size: 0.8rem;
     }
 }

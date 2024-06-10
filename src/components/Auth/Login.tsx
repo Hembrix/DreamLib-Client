@@ -6,8 +6,8 @@ interface AuthFormProps {
 }
 
 const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [Username, setUsername] = useState('');
+  const [Password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -18,7 +18,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
     setIsLoading(true);
     setIsError(false);
     try {
-      await login({ username, password }).unwrap();
+      await login({ Username, Password }).unwrap();
       console.log('Login successful');
       onClose(); // Закрываем модальное окно после успешной аутентификации
     } catch (error) {
@@ -32,11 +32,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ onClose }) => {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        <input type="text" placeholder="Логин/Email" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <input type="text" placeholder="Логин/Email" value={Username} onChange={(e) => setUsername(e.target.value)} />
       </label>
       <br />
       <label>
-        <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input type="Password" placeholder="Пароль" value={Password} onChange={(e) => setPassword(e.target.value)} />
       </label>
       <br />
       <button type="submit" disabled={isLoading}>Авторизация</button>
