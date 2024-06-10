@@ -5,7 +5,7 @@ import { Card } from '../card/Card';
 import { useGetCatalogQuery } from '../../store/dreamLibInjects/GetCatalogQuery';
 import { useGetFiltersQuery } from '../../store/dreamLibInjects/GetFilter';
 import { FilterParams } from '../types/FilterTitles';
-import { Title } from '../types/TitleListInterfaceTypes';
+import { Title } from '../types/TitleListInterface';
 
 export const CatalogPage: React.FC = () => {
   const [typeFilter, setTypeFilter] = useState<string[]>([]);
@@ -160,7 +160,7 @@ export const CatalogPage: React.FC = () => {
               average_rating={item.average_rating}
               imagetitle={item.imagetitle}
               titleSlug={item.titleSlug}
-            />
+              />
           ))}
         </div>
       </div>

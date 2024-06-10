@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 import { SearchModal } from '../SearchModal/SearchModal';
@@ -7,14 +7,9 @@ import AuthModal from '../Auth/AuthModal';
 export const Header: React.FC = () => {
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
   const [isAuthModalOpen, setAuthModalOpen] = useState(false); // Состояние модального окна аутентификации
-  const [isDarkMode, setDarkMode] = useState(() => {
-    const savedTheme = localStorage.getItem('isDarkMode');
-    return savedTheme ? JSON.parse(savedTheme) : false;
-  });
 
-  useEffect(() => {
-    localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
-  }, [isDarkMode]);
+
+
 
   const handleSearchClick = () => {
     setSearchModalOpen(true);
@@ -22,10 +17,6 @@ export const Header: React.FC = () => {
 
   const handleCloseModal = () => {
     setSearchModalOpen(false);
-  };
-
-  const handleThemeToggle = () => {
-    setDarkMode(!isDarkMode);
   };
 
   const handleAuthModalOpen = () => {
@@ -38,9 +29,9 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className={`${styles.headerContainer} ${isDarkMode ? styles.darkMode : ''}`}>
+      <header className={styles.headerContainer}>
         <Link to='/' className={styles.navLink}>
-          <img src={isDarkMode ? "/logo_white.png" : "/logo_dark.png"} alt="" width={150} height={75} />
+          <img src="/logo_dark.png" alt="" width={150} height={75} />
         </Link>
         <div className={styles.navigationLinks}>
           <Link to="/catalog" className={styles.navLink}>Каталог</Link>
@@ -49,9 +40,6 @@ export const Header: React.FC = () => {
         </div>
         <div className={styles.extraControls}>
           <button className={styles.bookmarksButton}>Закладки</button>
-          <button className={styles.themeToggle} onClick={handleThemeToggle}>
-            <span role="img" aria-label="dark-mode-toggle">{isDarkMode ? '☀️' : '🌙'}</span>
-          </button>
           <button className={styles.authenticationButton} onClick={handleAuthModalOpen}>Войти</button>
         </div>
       </header>

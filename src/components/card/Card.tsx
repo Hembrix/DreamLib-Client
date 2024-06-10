@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './Card.module.css';
 import { Link } from 'react-router-dom';
-import { Title } from '../types/TitleListInterfaceTypes';
+import { Title } from '../types/TitleListInterface';
 import { BASE_URL } from '../utils/baseUrl';
 
 

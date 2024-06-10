@@ -10,6 +10,7 @@ import { Footer } from './components/footer/Footer';
 import { ComicsPage } from './components/page/ComicsPage';
 import Reader from './components/reader/Reader';
 import { TitleManagement } from './components/TitleManagement/TitleManagament';
+import { ComicsTopPage } from './components/page/ComicsTopPage';
 
 
 
@@ -18,7 +19,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Router>
         <Header/>
         <Routes>
+        
           <Route path="/" element={<HomePage/>}/>
+          <Route path="/top" element={<ComicsTopPage/>}/>
           <Route path="/catalog" element={<CatalogPage/>}/>
           <Route path="/comics/:titleSlug" element={<ComicsPage/>}/>
           <Route path="/comics/:titleSlug/:chapter_id" element={<Reader/>} />

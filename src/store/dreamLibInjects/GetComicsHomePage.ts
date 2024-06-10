@@ -1,5 +1,5 @@
+import { Titles } from "../../components/types/TitleListInterface";
 import { baseApi } from "../../components/utils/baseUrl";
-import { Titles } from "../../components/types/TitleListInterfaceTypes";
 
 export const api = baseApi.injectEndpoints({
   endpoints: (builder) => ({

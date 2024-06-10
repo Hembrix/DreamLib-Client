@@ -3,7 +3,7 @@ import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResul
 import styles from './SearchModal.module.css';
 import { Link } from 'react-router-dom';
 import { BASE_URL } from '../utils/baseUrl';
-import { Title } from '../types/TitleListInterfaceTypes';
+import { Title } from '../types/TitleListInterface';
 
 interface SearchModalProps {
   isOpen: boolean;

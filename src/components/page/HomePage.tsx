@@ -3,7 +3,7 @@ import { Carousel } from '../Carousel/Carousel';
 import { Card } from '../card/Card';
 import styles from '../../styles/HomePage.module.css';
 import { useGetTitleListQuery } from '../../store/dreamLibInjects/GetComicsHomePage'; 
-import { Title } from '../../components/types/TitleListInterfaceTypes';
+import { Title } from '../types/TitleListInterface';
 
 export const HomePage: React.FC = () => {
     const { data: titleListData, isLoading, isError } = useGetTitleListQuery(); 

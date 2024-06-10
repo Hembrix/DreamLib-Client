@@ -6,14 +6,15 @@ import { Link } from 'react-router-dom';
 import { useGetChapterListQuery } from '../../store/dreamLibInjects/GetChapterList';
 import { ChapterList } from '../types/ChapterListInterfaceTypes';
 import { BASE_URL } from '../utils/baseUrl';
-import { useGetCommentsQuery } from '../../store/dreamLibInjects/GetCommentsQuery';// Импорт запроса для получения комментариев
+import { useGetCommentsQuery } from '../../store/dreamLibInjects/GetCommentsQuery';
 import { Comment } from '../types/CommentsListInterface';
+
 
 export const ComicsPage: React.FC = () => {
   const { titleSlug } = useParams<{ titleSlug: string }>();
   const { data: comicsInfo, isLoading: isLoadingComics, isError: isErrorComics } = useGetTitleQuery(titleSlug);
   const { data: chapterList, isLoading: isLoadingChapters, isError: isErrorChapters } = useGetChapterListQuery(titleSlug);
-  const { data: commentsInfo, isLoading: isLoadingComments, isError: isErrorComments } = useGetCommentsQuery(titleSlug); // Получение комментариев
+  const { data: commentsInfo, isLoading: isLoadingComments, isError: isErrorComments } = useGetCommentsQuery(titleSlug);
 
   const [activeTab, setActiveTab] = useState('Описание');
 
@@ -91,13 +92,17 @@ export const ComicsPage: React.FC = () => {
           )}
           {activeTab === 'Комментарии' && (
             <div className={styles.commentsList}>
-              {isLoadingComments && <div>Loading comments...</div>} {/* Индикатор загрузки комментариев */}
-              {isErrorComments && <div>Error loading comments.</div>} {/* Ошибка загрузки комментариев */}
-              {commentsInfo?.map((comment: Comment, index: number) => ( // Использование полученных комментариев
-                <div key={index} className={styles.comment}>
-                  <strong>{comment.user}</strong>: {comment.comment} <em>({comment.date})</em>
-                </div>
-              ))}
+              {isLoadingComments && <div>Loading comments...</div>}
+              {isErrorComments && <div>Error loading comments.</div>}
+              {commentsInfo ? (
+                commentsInfo.comments.map((comment: Comment, index: number) => (
+                  <div key={index} className={styles.comment}>
+                    <strong>{comment.user}</strong>: {comment.comment} <em>({comment.date})</em>
+                  </div>
+                ))
+              ) : (
+                <div>No comments available.</div>
+              )}
             </div>
           )}
         </div>
