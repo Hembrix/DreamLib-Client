@@ -3,8 +3,13 @@
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
-  background-color: #fef3e2; /* Цвет фона, соответствующий изображению */
+  background-color: #fff; /* Цвет фона для белой темы */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.imageLink {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .navLink {
@@ -36,19 +41,96 @@
 .searchButton:hover, .bookmarksButton:hover, .authenticationButton:hover, .themeToggle:hover {
   color: #ff7a00;
 }
-.mobileNav {
+
+.profileContainer {
+  position: relative;
+}
+
+.profileIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.profileMenu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   display: flex;
-  justify-content: space-around;
+  flex-direction: column;
+  z-index: 1000;
+  width: 200px;
+}
+
+.profileHeader {
+  display: flex;
+  align-items: center;
   padding: 10px;
-  background-color: #fef3e2;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #333;
+  color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.profileMenuIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profileMenuItem {
+  padding: 10px 20px;
+  cursor: pointer;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profileMenuItem:last-child {
+  border-bottom: none;
+}
+
+.profileMenuItem:hover {
+  background: #f0f0f0;
+}
+
+.profileMenuSubItem {
+  padding: 10px 40px;
+  cursor: pointer;
+  text-align: left;
+  color: #333;
+  display: block;
+}
+
+.profileMenuSubItem:hover {
+  background: #f0f0f0;
+}
+
+.addContentIcon {
+  margin-left: 10px;
+}
+
+.logoutText {
+  flex-grow: 1;
+}
+
+.logoutIcon {
+  font-size: 18px;
 }
 
 .mobileNav {
   display: flex;
   justify-content: space-around;
   padding: 10px;
-  background-color: #fef3e2;
+  background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
