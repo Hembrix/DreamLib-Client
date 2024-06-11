@@ -1,13 +1,13 @@
 import { baseApi } from "../../components/utils/baseUrl";
 
 interface RegisterResponse {
-  user: { username: string; email: string };
+  user: { username: string; email: string;groups:string,image:string  };
   refresh: string;
   access: string;
 }
 
-interface LoginResponse {
-  user: { username: string; email: string };
+export interface LoginResponse {
+  user: { username: string; email: string;groups:string,image:string };
   refresh: string;
   access: string;
 }

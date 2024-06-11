@@ -7,10 +7,15 @@ export interface Title {
   comment_count?: number;
 }
 
-export interface TitleList {
-  titles: Title[];
+export interface randomTitleList {
+  random_titles: Title[];
 }
-
+export interface newPopularTitleList {
+  popular_titles: Title[];
+}
+export interface newTitleList {
+  recent_titles: Title[];
+}
 export interface TopTitleList {
   top_titles: Title[];
 }

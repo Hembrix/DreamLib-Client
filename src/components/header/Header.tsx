@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 import { SearchModal } from '../SearchModal/SearchModal';
 import AuthModal from '../Auth/AuthModal';
+import { BASE_URL } from '../utils/baseUrl';
+import { LoginResponse } from '../../store/dreamLibInjects/auth';
 
 export const Header: React.FC = () => {
   const [isSearchModalOpen, setSearchModalOpen] = useState(false);
@@ -10,10 +12,14 @@ export const Header: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   const [isAddContentSubmenuOpen, setAddContentSubmenuOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState<LoginResponse | null>(null);
 
   useEffect(() => {
     const authData = localStorage.getItem('authData');
-    setIsAuthenticated(!!authData);
+    if (authData) {
+      setIsAuthenticated(true);
+      setUserInfo(JSON.parse(authData));
+    }
   }, []);
 
   const handleSearchClick = () => {
@@ -32,6 +38,7 @@ export const Header: React.FC = () => {
   const handleLogout = () => {
     localStorage.removeItem('authData');
     setIsAuthenticated(false);
+    setUserInfo(null);
   };
 
   const handleBookmarksClick = () => {
@@ -65,7 +72,7 @@ export const Header: React.FC = () => {
           {isAuthenticated ? (
             <div className={styles.profileContainer}>
               <img
-                src="/profile_picture.png" // Замените на фактический путь к иконке профиля
+                src={`${BASE_URL}${userInfo?.user.image}`}
                 alt="Profile"
                 className={styles.profileIcon}
                 onClick={handleProfileMenuToggle}
@@ -73,12 +80,12 @@ export const Header: React.FC = () => {
               {isProfileMenuOpen && (
                 <div className={styles.profileMenu}>
                   <div className={styles.profileHeader}>
-                    <img src="/profile_picture.png" alt="Profile" className={styles.profileMenuIcon} />
-                    <span>Hembrix</span>
+                    <img src={`${BASE_URL}${userInfo?.user.image}`} alt="Profile" className={styles.profileMenuIcon} />
+                    <span>{userInfo?.user.username}</span>
                   </div>
                   <button className={styles.profileMenuItem} onClick={handleAddContentClick}>
                     Добавить контент
-                    <span className={styles.addContentIcon}>{isAddContentSubmenuOpen}</span>
+                    <span className={styles.addContentIcon}>{isAddContentSubmenuOpen ? '-' : '+'}</span>
                   </button>
                   {isAddContentSubmenuOpen && (
                     <>

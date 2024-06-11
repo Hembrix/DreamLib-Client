@@ -8,7 +8,7 @@ import { HomePage } from './components/page/HomePage';
 import { CatalogPage } from './components/page/CatalogPage';
 import { Footer } from './components/footer/Footer';
 import { ComicsPage } from './components/page/ComicsPage';
-import Reader from './components/reader/Reader';
+import { Reader } from './components/reader/Reader';
 import { ComicsTopPage } from './components/page/ComicsTopPage';
 import { AddTitle } from './components/TitleManagement/addTitle';
 
