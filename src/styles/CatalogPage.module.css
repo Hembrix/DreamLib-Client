@@ -7,29 +7,68 @@
 .mainContent {
   display: flex;
   gap: 20px;
+  align-items: flex-start;
+}
+
+.catalogTitle {
+  display: inline-block;
+}
+
+.toggleFiltersBtn {
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #007bff;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.filtersContainer {
+  position: relative;
+  width: 100%;
+}
+
+.filtersOverlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 1000;
+}
+
+.filtersOverlay.show {
+  display: block;
 }
 
 .filters {
   display: flex;
   flex-direction: column;
-  width: 250px;
-  padding: 10px;
-  background-color: #f9f9f9;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  padding: 20px;
+  overflow-y: auto;
 }
 
 .filter {
   margin-bottom: 10px;
 }
 
-.filterSection {
-  margin-bottom: 20px;
+.applyFiltersBtn {
+  margin-top: auto;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
+
 .inputField {
-  margin-bottom: 10px;
-  padding: 5px;
   width: calc(50% - 10px);
   border: 1px solid #ddd;
   border-radius: 8px;
@@ -47,19 +86,38 @@
   font-weight: bold;
 }
 
-.catalog {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
-  flex: 1;
+.mobileOnly {
+  display: block;
 }
 
-.loading, .error {
-  text-align: center;
-  margin-top: 50px;
+.desktopOnly {
+  display: none;
 }
 
-h3 {
-  font-size: 24px;
-  margin-bottom: 20px;
+@media (min-width: 768px) {
+  .mobileOnly {
+    display: none;
+  }
+  .desktopOnly {
+    display: block;
+  }
+  .filtersOverlay {
+    display: block;
+    position: static;
+    background-color: transparent;
+  }
+  .filters {
+    position: static;
+    flex-direction: column;
+    padding: 0;
+    overflow-y: visible;
+    width: auto;
+  }
+  .catalog {
+    order: -1; /* Перемещаем каталог в начало */
+    flex: 1; /* Занимает оставшееся пространство */
+  }
+  .filtersContainer {
+    width: 300px; /* Ширина боковой панели с фильтрами на десктопе */
+  }
 }

@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import styles from '../../styles/ComicsPage.module.css';
 import { useGetTitleQuery } from '../../store/dreamLibInjects/GetComicsInfo';
-import { Link } from 'react-router-dom';
 import { useGetChapterListQuery } from '../../store/dreamLibInjects/GetChapterList';
-import { ChapterList } from '../types/ChapterListInterfaceTypes';
-import { BASE_URL } from '../utils/baseUrl';
 import { useGetCommentsQuery } from '../../store/dreamLibInjects/GetCommentsQuery';
+import { BASE_URL } from '../utils/baseUrl';
+import { ChapterList } from '../types/ChapterListInterfaceTypes';
 import { Comment } from '../types/CommentsListInterface';
-
 
 export const ComicsPage: React.FC = () => {
   const { titleSlug } = useParams<{ titleSlug: string }>();
@@ -41,6 +39,18 @@ export const ComicsPage: React.FC = () => {
       </div>
 
       <div className={styles.contentContainer}>
+        <div className={styles.infoContainer}>
+          <h1 className={styles.title}>{comicsInfo.title}</h1>
+          <div className={styles.infoContainer}>
+            <p className={styles.label}>Рейтинг</p>
+            <p className={styles.rating}>★{comicsInfo.average_rating}</p>
+          </div>
+          <div className={styles.infoContainer}>
+            <p className={styles.label}>Глав</p>
+            <p className={styles.chapterCount}>{chapterList?.chapter_count} </p>
+          </div>
+      </div>
+
         <div className={styles.tabs}>
           <button
             className={`${styles.tabButton} ${activeTab === 'Описание' ? styles.activeTabButton : ''}`}
@@ -80,7 +90,7 @@ export const ComicsPage: React.FC = () => {
                 chapterList.chapters.map((chapter: ChapterList) => (
                   <Link key={chapter.chapter_number} className={styles.chapter} to={`/comics/${titleSlug}/${chapter.chapter_number}`}>
                     <div className={styles.chapterTitle}>
-                      <span>Глава </span>{chapter.chapter_number}
+                      <span>{chapter.chapter_name}</span>
                     </div>
                     <div className={styles.chapterDate}>{chapter.upload_date}</div>
                   </Link>
@@ -110,4 +120,3 @@ export const ComicsPage: React.FC = () => {
     </div>
   );
 };
-

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResult';
 import styles from './SearchModal.module.css';
 import { Link } from 'react-router-dom';
@@ -22,6 +22,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
     }
   }, [isOpen]);
 
+  // Обработчик клика на фоновое модальное окно
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setSearchQuery(''); // Сбрасываем состояние поиска
+      onClose(); // Вызываем onClose из пропсов
+    }
+  };
+
   const handleClose = () => {
     setSearchQuery(''); // Сбрасываем состояние поиска
     onClose(); // Вызываем onClose из пропсов
@@ -30,7 +38,7 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
   if (!isOpen) return null;
 
   return (
-    <div className={styles.modalOverlay}>
+    <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent}>
         <button className={styles.closeButton} onClick={handleClose}>&times;</button>
         <input

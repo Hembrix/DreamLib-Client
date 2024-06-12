@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AuthForm from './Login';
 import RegisterForm from './Registration';
+import styles from './AuthModal.module.css'; // Подключаем модульные стили
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -15,27 +16,31 @@ const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   };
 
   return (
-    isOpen && (
-      <div className="modal">
-        <div className="modal-content">
-          <span className="close" onClick={onClose}>&times;</span>
-          {isRegister ? (
-            <>
-              <h2>Регистрация</h2>
-              <RegisterForm onClose={onClose} />
-            </>
-          ) : (
-            <>
-              <h2>Авторизация</h2>
-              <AuthForm onClose={onClose} />
-            </>
-          )}
-          <button onClick={toggleForm}>
-            {isRegister ? 'Switch to Login' : 'Switch to Register'}
-          </button>
+    <>
+      {isOpen && (
+        <div className={styles.modalOverlay} onClick={onClose}>
+          <div className={styles.modal}>
+            <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+              {isRegister ? (
+                <>
+                  <h2>Регистрация</h2>
+                  <RegisterForm onClose={onClose} />
+                  <p>Уже есть учетная запись? </p>
+                  <span className={styles.switchLink} onClick={toggleForm}>Авторизоваться</span>
+                </>
+              ) : (
+                <>
+                  <h2>Авторизация</h2>
+                  <AuthForm onClose={onClose} />
+                  <p>Нет учетной записи?</p>
+                  <span className={styles.switchLink} onClick={toggleForm}>Зарегистрироваться</span>
+                </>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    )
+      )}
+    </>
   );
 };
 

@@ -13,7 +13,6 @@ import { ComicsTopPage } from './components/page/ComicsTopPage';
 import { AddTitle } from './components/TitleManagement/addTitle';
 
 
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <Provider store={store}> 
       <Router>
@@ -24,7 +23,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/top" element={<ComicsTopPage/>}/>
           <Route path="/catalog" element={<CatalogPage/>}/>
           <Route path="/comics/:titleSlug" element={<ComicsPage/>}/>
-          <Route path="/comics/:titleSlug/:chapter_id" element={<Reader/>} />
+          <Route path="/comics/:titleSlug/:chapter_number" element={<Reader/>} />
           <Route path="/add-title" element={<AddTitle/>} />
         </Routes>
         <Footer/>

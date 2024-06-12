@@ -1,55 +1,76 @@
+/* SearchModal.module.css */
+
 .modalOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .modalContent {
-    background: #2c2c2c;
-    border-radius: 10px;
-    padding: 20px;
-    width: 400px;
-    max-width: 90%;
-  }
-  
-  .searchInput {
-    width: 95%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 25px; /* Делает углы поля ввода круглыми */
-    text-align: center;
-  }
-  
-  
-  .resultItem {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 10px;
-  }
-  
-  .resultItem img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 10px;
-  }
-  
-  .resultText {
-    color: white;
-  }
-  
-  .closeButton {
-    background: none;
-    border: none;
-    color: white;
-    margin-bottom: 20px;
-    font-size: 24px;  
-    cursor: pointer;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  background: #2c2c2c;
+  border-radius: 10px;
+  padding: 20px;
+  width: 400px;
+  max-width: 90%;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  text-align: center;
+  font-size: 16px;
+  background-color: #fff; /* Цвет фона поля ввода */
+  color: #333; /* Цвет текста поля ввода */
+  margin-bottom: 20px; /* Отступ снизу */
+}
+
+.searchInput::placeholder {
+  color: #ccc; /* Цвет плейсхолдера */
+}
+
+.resultItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px; /* Скругленные углы для результатов поиска */
+  transition: background-color 0.3s ease; /* Плавное изменение цвета фона */
+}
+
+.resultItem:hover {
+  background-color: #444; /* Изменение цвета фона при наведении */
+}
+
+.resultItem img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.resultText {
+  color: white;
+}
+
+.closeButton {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.closeButton:hover {
+  color: #ccc; /* Изменение цвета кнопки при наведении */
+}

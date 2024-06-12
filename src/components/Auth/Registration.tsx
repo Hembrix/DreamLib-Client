@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { useRegisterMutation } from '../../store/dreamLibInjects/auth';
+import styles from './RegisterForm.module.css'; // Подключаем модульные стили
 
 const fixedSalt = '$2a$10$w6.wqJqDsGh9FQHI28BuXe';  // фиксированная соль
 
@@ -52,26 +53,22 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.registerForm} onSubmit={handleSubmit}>
       <label>
         <input type="text" placeholder="Логин" value={username} onChange={(e) => setUsername(e.target.value)} />
       </label>
-      <br />
       <label>
         <input type="email" placeholder="Почта" value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
-      <br />
       <label>
         <input type="password" placeholder="Пароль" value={password} onChange={(e) => setPassword(e.target.value)} />
       </label>
-      <br />
       <label>
         <input type="password" placeholder="Подтвердите пароль" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
       </label>
-      <br />
       <button type="submit" disabled={isLoading}>Регистрация</button>
-      {isError && <div>Ошибка при регистрации</div>}
-      {errorMessage && <div>{errorMessage}</div>}
+      {isError && <div className={styles.error}>Ошибка при регистрации</div>}
+      {errorMessage && <div className={styles.errorMessage}>{errorMessage}</div>}
     </form>
   );
 };

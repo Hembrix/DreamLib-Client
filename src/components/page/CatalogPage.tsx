@@ -18,6 +18,7 @@ export const CatalogPage: React.FC = () => {
   const [maxYearFilter, setMaxYearFilter] = useState<string | null>(null);
   const [minChaptersFilter, setMinChaptersFilter] = useState<string | null>(null);
   const [maxChaptersFilter, setMaxChaptersFilter] = useState<string | null>(null);
+  const [showFilters, setShowFilters] = useState(false); // State to manage filters visibility
 
   const filterParams: FilterParams = {
     title_types: typeFilter.length ? typeFilter : undefined,
@@ -36,10 +37,16 @@ export const CatalogPage: React.FC = () => {
   const { data: filtersData, error: filtersError, isLoading: filtersLoading } = useGetFiltersQuery();
 
   const handleMultiSelectChange = (
-    setState: React.Dispatch<React.SetStateAction<string[]>>, 
-    selectedOptions: MultiValue<{ value: string; label: string; }>
+    setState: React.Dispatch<React.SetStateAction<string[]>>,
+    selectedOptions: MultiValue<{ value: string; label: string }>
   ) => {
     setState(selectedOptions.map(option => option.value));
+  };
+
+  const applyFilters = () => {
+    // Применить фильтры...
+    // Закрыть фильтры после применения
+    setShowFilters(false);
   };
 
   if (catalogLoading || filtersLoading) return <div className={styles.loading}>Loading...</div>;
@@ -48,120 +55,138 @@ export const CatalogPage: React.FC = () => {
   const typeOptions = filtersData?.types_of_work.map(type => ({ value: type, label: type })) ?? [];
   const genreOptions = filtersData?.genres.map(genre => ({ value: genre, label: genre })) ?? [];
   const projectStatusOptions = filtersData?.status.map(status => ({ value: status, label: status })) ?? [];
-  const translationStatusOptions = filtersData?.translation_status.map(status => ({ value: status, label: status })) ?? [];
+  const translationStatusOptions =
+    filtersData?.translation_status.map(status => ({ value: status, label: status })) ?? [];
 
   return (
     <div className={styles.catalogContainer}>
-      <h3>Каталог</h3>
+      <div className={styles.header}>
+        <h3 className={styles.catalogTitle}>Каталог</h3>
+        {/* Показывать кнопку только на мобильных устройствах */}
+        <button className={`${styles.toggleFiltersBtn} ${styles.mobileOnly}`} onClick={() => setShowFilters(!showFilters)}>
+           фильтры
+        </button>
+      </div>
       <div className={styles.mainContent}>
-        <div className={styles.filters}>
-          <Select
-            className={styles.filter}
-            options={typeOptions}
-            isMulti
-            isSearchable
-            placeholder="Типы"
-            onChange={(selectedOptions) => handleMultiSelectChange(setTypeFilter, selectedOptions)}
-          />
-          <Select
-            className={styles.filter}
-            options={genreOptions}
-            isMulti
-            isSearchable
-            placeholder="Жанры"
-            onChange={(selectedOptions) => handleMultiSelectChange(setGenreFilter, selectedOptions)}
-          />
-          <Select
-            className={styles.filter}
-            options={projectStatusOptions}
-            isMulti
-            isSearchable
-            placeholder="Статус проекта"
-            onChange={(selectedOptions) => handleMultiSelectChange(setProjectStatusFilter, selectedOptions)}
-          />
-          <Select
-            className={styles.filter}
-            options={translationStatusOptions}
-            isMulti
-            isSearchable
-            placeholder="Статус перевода"
-            onChange={(selectedOptions) => handleMultiSelectChange(setTranslationStatusFilter, selectedOptions)}
-          />
-          <div className={styles.filterSection}>
-            <p>Рейтинг</p>
-            <div className={styles.inputFieldContainer}>
-              <input
-                className={styles.inputField}
-                type="number"
-                step="0.1"
-                placeholder="От"
-                value={minRatingFilter ?? ''}
-                onChange={e => setMinRatingFilter(e.target.value)}
-              />
-              <input
-                className={styles.inputField}
-                type="number"
-                step="0.1"
-                placeholder="До"
-                value={maxRatingFilter ?? ''}
-                onChange={e => setMaxRatingFilter(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className={styles.filterSection}>
-            <p>Год выпуска</p>
-            <div className={styles.inputFieldContainer}>
-              <input
-                className={styles.inputField}
-                type="number"
-                step="1"
-                placeholder="От"
-                value={minYearFilter ?? ''}
-                onChange={e => setMinYearFilter(e.target.value)}
-              />
-              <input
-                className={styles.inputField}
-                type="number"
-                step="1"
-                placeholder="До"
-                value={maxYearFilter ?? ''}
-                onChange={e => setMaxYearFilter(e.target.value)}
-              />
-            </div>
-          </div>
-          <div className={styles.filterSection}>
-            <p>Количество глав</p>
-            <div className={styles.inputFieldContainer}>
-              <input
-                className={styles.inputField}
-                type="number"
-                step="1"
-                placeholder="От"
-                value={minChaptersFilter ?? ''}
-                onChange={e => setMinChaptersFilter(e.target.value)}
-              />
-              <input
-                className={styles.inputField}
-                type="number"
-                step="1"
-                placeholder="До"
-                value={maxChaptersFilter ?? ''}
-                onChange={e => setMaxChaptersFilter(e.target.value)}
-              />
-            </div>
-          </div>
-        </div>
         <div className={styles.catalog}>
           {catalogData?.titles.map((item: Title) => (
-            <Card 
+            <Card
               key={item.titleSlug}
               title={item.title}
               type_of_work={item.type_of_work}
               average_rating={item.average_rating}
               imagetitle={item.imagetitle}
               titleSlug={item.titleSlug}
-              />
+            />
           ))}
+        </div>
+        <div className={`${styles.filtersOverlay} ${showFilters ? styles.show : ''}`}>
+          <div className={styles.filtersContainer}>
+            <div className={styles.filters}>
+              <Select
+                className={styles.filter}
+                options={typeOptions}
+                isMulti
+                isSearchable
+                placeholder="Типы"
+                onChange={selectedOptions => handleMultiSelectChange(setTypeFilter, selectedOptions)}
+              />
+              <Select
+                className={styles.filter}
+                options={genreOptions}
+                isMulti
+                isSearchable
+                placeholder="Жанры"
+                onChange={selectedOptions => handleMultiSelectChange(setGenreFilter, selectedOptions)}
+              />
+              <Select
+                className={styles.filter}
+                options={projectStatusOptions}
+                isMulti
+                isSearchable
+                placeholder="Статус проекта"
+                onChange={selectedOptions =>
+                  handleMultiSelectChange(setProjectStatusFilter, selectedOptions)
+                }
+              />
+              <Select
+                className={styles.filter}
+                options={translationStatusOptions}
+                isMulti
+                isSearchable
+                placeholder="Статус перевода"
+                onChange={selectedOptions =>
+                  handleMultiSelectChange(setTranslationStatusFilter, selectedOptions)}
+              />
+              <div className={styles.filterSection}>
+                <p>Рейтинг</p>
+                <div className={styles.inputFieldContainer}>
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    step="0.1"
+                    placeholder="От"
+                    value={minRatingFilter ?? ''}
+                    onChange={e => setMinRatingFilter(e.target.value)}
+                  />
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    step="0.1"
+                    placeholder="До"
+                    value={maxRatingFilter ?? ''}
+                    onChange={e => setMaxRatingFilter(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className={styles.filterSection}>
+                <p>Год выпуска</p>
+                <div className={styles.inputFieldContainer}>
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    step="1"
+                    placeholder="От"
+                    value={minYearFilter ?? ''}
+                    onChange={e => setMinYearFilter(e.target.value)}
+                  />
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    step="1"
+                    placeholder="До"
+                    value={maxYearFilter ?? ''}
+                    onChange={e => setMaxYearFilter(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className={styles.filterSection}>
+                <p>Количество глав</p>
+                <div className={styles.inputFieldContainer}>
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    step="1"
+                    placeholder="От"
+                    value={minChaptersFilter ?? ''}
+                    onChange={e => setMinChaptersFilter(e.target.value)}
+                  />
+                  <input
+                    className={styles.inputField}
+                    type="number"
+                    step="1"
+                    placeholder="До"
+                    value={maxChaptersFilter ?? ''}
+                    onChange={e => setMaxChaptersFilter(e.target.value)}
+                  />
+                </div>
+              </div>
+              {/* Показывать кнопку "Применить" только на мобильных устройствах */}
+              <button className={`${styles.applyFiltersBtn} ${styles.mobileOnly}`} onClick={applyFilters}>
+                Применить
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

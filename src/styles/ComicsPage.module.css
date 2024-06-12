@@ -1,3 +1,5 @@
+/* styles/ComicsPage.module.css */
+
 .container {
   display: flex;
   padding: 20px;
@@ -118,4 +120,73 @@
 .chapterDate {
   font-size: 0.9em;
   color: #666;
+}
+
+/* New styles to make elements display in a row with internal elements in a column */
+.infoContainer {
+  display: flex;
+  align-items: center; /* Вертикальное выравнивание */
+  justify-content: space-between; /* Горизонтальное распределение */
+  flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку при необходимости */
+  margin-bottom: 20px; /* Отступ снизу */
+}
+
+.title {
+  flex: 1 1 auto; /* Заголовок займет оставшееся пространство */
+  margin-right: 20px; /* Отступ справа от заголовка */
+}
+
+.ratingContainer,
+.chapterContainer {
+  display: flex;
+  flex-direction: column; /* Располагает элементы внутри контейнера в столбик */
+  align-items: center;
+  margin: 0 10px; /* Отступы между контейнерами */
+}
+
+.label {
+  margin-bottom: 5px; /* Отступ снизу от метки */
+}
+
+.rating,
+.chapterCount {
+  font-weight: bold; /* Выделение текста */
+}
+
+/* Дополнительные стили, чтобы элементы не накладывались друг на друга при узком экране */
+@media (max-width: 600px) {
+  .infoContainer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .title {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+
+  .ratingContainer,
+  .chapterContainer {
+    margin-bottom: 10px;
+  }
+}
+
+/* Global scrollbar styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #007bff #f1f1f1;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #007bff;
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
 }

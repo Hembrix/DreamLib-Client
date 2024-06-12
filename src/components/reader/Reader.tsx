@@ -1,53 +1,84 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import './Reader.css';
 import { useGetChapterQuery } from '../../store/dreamLibInjects/GetChapter';
 import { Chapter } from '../types/ChapterInterface';
+import { BASE_URL } from '../utils/baseUrl';
 
 export const Reader: React.FC = () => {
-  const { chapterId, titleSlug } = useParams<{ chapterId: string; titleSlug: string }>();
-  const [chapter_number, setChapter] = useState<number>(chapterId ? parseInt(chapterId, 10) : 1);
+  const { chapter_number, titleSlug } = useParams<{ chapter_number?: string; titleSlug: string }>();
+  const navigate = useNavigate();
+  const chapterNumber = chapter_number ? parseInt(chapter_number, 10) : 1;
   const [pages, setPages] = useState<string[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [viewMode, setViewMode] = useState<'scroll' | 'flip'>('scroll');
 
-  const { data: chapterData, error, isLoading } = useGetChapterQuery({ titleSlug: titleSlug ?? "", chapterNumber: chapter_number });
+  const { data: chapterData, error, isLoading } = useGetChapterQuery({ titleSlug: titleSlug ?? "", chapterNumber: chapterNumber });
 
   useEffect(() => {
     if (chapterData) {
       const chapterPages: string[] = chapterData.pages.map((page: Chapter) => page.image_data);
       setPages(chapterPages);
+      setCurrentPage(0); // Reset current page to first page on chapter change
     }
-  }, [chapterData]);
+  }, [chapterData, chapterNumber, titleSlug]);
 
-  const totalChapters = chapterData?.chapter_count ?? 1;
+  const handlePageClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    const { clientX, currentTarget } = event;
+    const middle = currentTarget.clientWidth / 2;
+
+    if (clientX < middle) {
+      setCurrentPage((prev) => (prev > 0 ? prev - 1 : prev));
+    } else {
+      setCurrentPage((prev) => (prev < pages.length - 1 ? prev + 1 : prev));
+    }
+  };
+
+  const toggleViewMode = () => {
+    setViewMode((prevMode) => (prevMode === 'scroll' ? 'flip' : 'scroll'));
+  };
+
+  const handleChapterChange = (newChapterNumber: number) => {
+    setCurrentPage(0); // Reset current page to first page on chapter change
+    navigate(`/comics/${titleSlug}/${newChapterNumber}`);
+  };
 
   return (
     <div className="reader">
       <div className="reader-header">
-        {chapter_number > 1 ? (
-          <Link to={`/reader/${titleSlug}/${chapter_number - 1}`} onClick={() => setChapter(chapter_number - 1)}>
-            Предыдущая глава
-          </Link>
-        ) : (
-          <button disabled>Предыдущая глава</button>
-        )}
-        <span>Глава {chapter_number}</span>
-        {chapter_number < totalChapters ? (
-          <Link to={`/reader/${titleSlug}/${chapter_number + 1}`} onClick={() => setChapter(chapter_number + 1)}>
-            Следующая глава
-          </Link>
-        ) : (
-          <button disabled>Следующая глава</button>
-        )}
+        <Link to={`/comics/${titleSlug}`} className="nav-button">
+        &larr; К тайтлу
+        </Link>
+        <button onClick={() => handleChapterChange(chapterNumber - 1)} className="nav-button" disabled={chapterNumber <= 1}>
+          &larr;
+        </button>
+        <span>Глава {chapterNumber}</span>
+        <button onClick={() => handleChapterChange(chapterNumber + 1)} className="nav-button" disabled={chapterNumber >= (chapterData?.chapter_count ?? 1)}>
+          &rarr;
+        </button>
+        <button onClick={toggleViewMode} className="view-toggle">
+          {viewMode === 'scroll' ? 'Перелистывание' : 'Лента'}
+        </button>
       </div>
-      <div className="reader-content">
+      <div className={`reader-content ${viewMode}`} onClick={viewMode === 'flip' ? handlePageClick : undefined}>
         {isLoading && <div>Loading...</div>}
         {error && <div>Error fetching chapter</div>}
-        {!isLoading && !error && chapterData && pages.map((page: string, index: number) => (
-          <img key={index} src={page} alt={`Глава ${chapter_number}, Страница ${index + 1}`} />
-        ))}
+        {!isLoading && !error && chapterData && (
+          <>
+            {viewMode === 'scroll' && pages.map((page: string, index: number) => (
+              <img key={index} src={`${BASE_URL}${page}`} alt={`Глава ${chapterNumber}, Страница ${index}`} />
+            ))}
+            {viewMode === 'flip' && pages.length > 0 && (
+              <div className="flip-view">
+                <img src={`${BASE_URL}${pages[currentPage]}`} alt={`Глава ${chapterNumber}, Страница ${currentPage}`} />
+                <div className="page-counter">
+                  {currentPage + 1} / {pages.length}
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
 };
-
-
