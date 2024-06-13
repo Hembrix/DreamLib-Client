@@ -62,7 +62,7 @@ export const AddTitle: React.FC = () => {
     formData.append('author', author);
     formData.append('description', description);
     formData.append('title_date', titleDate);
-    formData.append('image_title', image); // Добавляем изображение
+    formData.append('image_title', image); // Внимание: передаем сам файл, а не его имя
 
     selectedGenres.forEach(genre => formData.append('genre_names', genre.value));
     formData.append('title_status_name', selectedStatus!.value);
