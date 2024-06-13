@@ -52,37 +52,30 @@ export const AddTitle: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!titleName || !author || !description || !image || !selectedGenres.length || !selectedStatus || !selectedType || !translationStatus || !titleDate) {
+    if (!titleName || !author || !description || !selectedGenres.length || !selectedStatus || !selectedType || !translationStatus || !titleDate) {
       console.error('Заполните обязательные поля');
       return;
     }
+
+    const authData = JSON.parse(localStorage.getItem('authData') || '{}');
+    const access = authData?.access || '';
+
+    const formattedDate = titleDate.split('.').reverse().join('-');
 
     const formData = new FormData();
     formData.append('title_name', titleName);
     formData.append('author', author);
     formData.append('description', description);
-    formData.append('title_date', titleDate);
-    if (image) {
-      formData.append('image_title', image);
-    }
-
-    selectedGenres.forEach(genre => formData.append('genre_names', genre.value));
+    formData.append('title_date', formattedDate);
+    formData.append('genre_names', JSON.stringify(selectedGenres.map(genre => genre.value)));
     formData.append('title_status_name', selectedStatus!.value);
     formData.append('type_name', selectedType!.value);
     formData.append('translation_status_name', translationStatus!.value);
+    formData.append('access', access);
 
-    // Вывод отправляемых данных в консоль
-    const sendData = {
-      title_name: titleName,
-      author: author,
-      description: description,
-      title_date: titleDate,
-      genre_names: selectedGenres.map(genre => genre.value),
-      title_status_name: selectedStatus!.value,
-      type_name: selectedType!.value,
-      translation_status_name: translationStatus!.value
-    };
-    console.log('Отправляемые данные:', sendData);
+    if (image) {
+      formData.append('image', image);
+    }
 
     try {
       await addTitle(formData);

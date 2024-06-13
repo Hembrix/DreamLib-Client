@@ -9,6 +9,9 @@ export const api = baseApi.injectEndpoints({
         url: 'api/add/titles/',
         method: 'POST',
         body: formData,
+        headers: {
+          'Accept': 'application/json',
+        },
       }),
     }),
   }),
