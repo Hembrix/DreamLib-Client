@@ -52,30 +52,36 @@ export const AddTitle: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!titleName || !author || !description || !selectedGenres.length || !selectedStatus || !selectedType || !translationStatus || !titleDate) {
+    if (!titleName || !author || !description || !image || !selectedGenres.length || !selectedStatus || !selectedType || !translationStatus || !titleDate) {
       console.error('Заполните обязательные поля');
       return;
     }
-
-    const authData = JSON.parse(localStorage.getItem('authData') || '{}');
-    const access = authData?.access || '';
-
-    const formattedDate = titleDate.split('.').reverse().join('-');
 
     const formData = new FormData();
     formData.append('title_name', titleName);
     formData.append('author', author);
     formData.append('description', description);
-    formData.append('title_date', formattedDate);
-    formData.append('genre_names', JSON.stringify(selectedGenres.map(genre => genre.value)));
+    formData.append('title_date', titleDate);
+    formData.append('image_title', image); // Добавляем изображение
+
+    selectedGenres.forEach(genre => formData.append('genre_names', genre.value));
     formData.append('title_status_name', selectedStatus!.value);
     formData.append('type_name', selectedType!.value);
     formData.append('translation_status_name', translationStatus!.value);
-    formData.append('access', access);
 
-    if (image) {
-      formData.append('image', image);
-    }
+    // Вывод отправляемых данных в консоль
+    const sendData = {
+      title_name: titleName,
+      author: author,
+      description: description,
+      title_date: titleDate,
+      genre_names: selectedGenres.map(genre => genre.value),
+      title_status_name: selectedStatus!.value,
+      type_name: selectedType!.value,
+      translation_status_name: translationStatus!.value,
+      image_title: image.name // Имя изображения для отображения в консоли
+    };
+    console.log('Отправляемые данные:', sendData);
 
     try {
       await addTitle(formData);
@@ -135,71 +141,71 @@ export const AddTitle: React.FC = () => {
           </div>
           <div className={styles.infoItem}>
             <label className={styles.label}>Автор:</label>
-              <input
-                type="text"
-                value={author}
-                onChange={(e) => setAuthor(e.target.value)}
-                className={styles.input}
-                />
-                </div>
-                <div className={styles.infoItem}>
-                  <label className={styles.label}>Дата (дд.мм.гггг):</label>
-                    <input
-                      type="text"
-                      value={titleDate}
-                      onChange={(e) => setTitleDate(e.target.value)}
-                      className={styles.input}
-                      placeholder="дд.мм.гггг"
-                    />
-                </div>
-              </div>
-            </div>
-            <form onSubmit={handleSubmit} className={styles.form}>
-              <label className={styles.label}>
-                Описание:
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  className={styles.textarea}
-                />
-              </label>
-              <label className={styles.label}>Жанры:</label>
-                  <Select
-                    options={filtersData?.genres.map((genre) => ({ value: genre, label: genre })) || []}
-                    isMulti
-                    value={selectedGenres}
-                    onChange={(newValue: MultiValue<{ value: string; label: string }>) =>
-                      setSelectedGenres(newValue as { value: string; label: string }[])
-                    }
-                    className={styles.select}
-                  />
-              <div className={styles.flexContainer}>
-                <div className={styles.statusContainer}>
-                  <label className={styles.label}>Статус перевода:</label>
-                  <Select
-                    options={filtersData?.translation_status.map((status) => ({ value: status, label: status })) || []}
-                    value={translationStatus}
-                    onChange={(newValue: { value: string; label: string } | null) =>
-                      setTranslationStatus(newValue)
-                    }
-                    className={styles.select}
-                  />
-                </div>
-                <div className={styles.statusContainer}>
-                  <label className={styles.label}>Статус проекта:</label>
-                  <Select
-                    options={filtersData?.status.map((status) => ({ value: status, label: status })) || []}
-                    value={selectedStatus}
-                    onChange={(newValue: { value: string; label: string } | null) =>
-                      setSelectedStatus(newValue)
-                    }
-                    className={styles.select}
-                  />
-                </div>
-              </div>
-              <button type="submit" disabled={isLoading} className={styles.submitButton}>Добавить</button>
-              {isError && <div className={styles.error}>Ошибка при добавлении произведения</div>}
-            </form>
+            <input
+              type="text"
+              value={author}
+              onChange={(e) => setAuthor(e.target.value)}
+              className={styles.input}
+            />
           </div>
-        );
-      };
+          <div className={styles.infoItem}>
+            <label className={styles.label}>Дата (дд.мм.гггг):</label>
+            <input
+              type="text"
+              value={titleDate}
+              onChange={(e) => setTitleDate(e.target.value)}
+              className={styles.input}
+              placeholder="дд.мм.гггг"
+            />
+          </div>
+        </div>
+      </div>
+      <form onSubmit={handleSubmit} className={styles.form}>
+        <label className={styles.label}>
+          Описание:
+          <textarea
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className={styles.textarea}
+          />
+        </label>
+        <label className={styles.label}>Жанры:</label>
+        <Select
+          options={filtersData?.genres.map((genre) => ({ value: genre, label: genre })) || []}
+          isMulti
+          value={selectedGenres}
+          onChange={(newValue: MultiValue<{ value: string; label: string }>) =>
+            setSelectedGenres(newValue as { value: string; label: string }[])
+          }
+          className={styles.select}
+        />
+        <div className={styles.flexContainer}>
+          <div className={styles.statusContainer}>
+            <label className={styles.label}>Статус перевода:</label>
+            <Select
+              options={filtersData?.translation_status.map((status) => ({ value: status, label: status })) || []}
+              value={translationStatus}
+              onChange={(newValue: { value: string; label: string } | null) =>
+                setTranslationStatus(newValue)
+              }
+              className={styles.select}
+            />
+          </div>
+          <div className={styles.statusContainer}>
+            <label className={styles.label}>Статус проекта:</label>
+            <Select
+              options={filtersData?.status.map((status) => ({ value: status, label: status })) || []}
+              value={selectedStatus}
+              onChange={(newValue: { value: string; label: string } | null) =>
+                setSelectedStatus(newValue)
+              }
+              className={styles.select}
+            />
+          </div>
+        </div>
+        <button type="submit" disabled={isLoading} className={styles.submitButton}>Добавить</button>
+        {isError && <div className={styles.error}>Ошибка при добавлении произведения</div>}
+      </form>
+    </div>
+  );
+};
