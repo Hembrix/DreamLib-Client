@@ -1,19 +1,23 @@
 import React, { useState, useRef } from 'react';
-import Select, { SingleValue } from 'react-select';
+import Select, {SingleValue } from 'react-select';
 import styles from './AddChapter.module.css';
 import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResult';
 import { useAddChapterMutation } from '../../store/dreamLibInjects/postChapter';
 
+interface ImageFile extends File {
+  preview: string;
+}
+
 export const AddChapter: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const { data: searchResults = [], isLoading: isSearchLoading } = useSearchTitlesQuery(searchQuery, {
     skip: !searchQuery,
   });
 
   const [selectedTitle, setSelectedTitle] = useState<{ value: string; label: string } | null>(null);
-  const [chapterTitle, setChapterTitle] = useState('');
-  const [images, setImages] = useState<File[]>([]);
-  const [isEditing, setIsEditing] = useState(false);
+  const [chapterTitle, setChapterTitle] = useState<string>('');
+  const [images, setImages] = useState<ImageFile[]>([]);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [viewMode, setViewMode] = useState<'scroll' | 'flip'>('scroll');
@@ -22,12 +26,15 @@ export const AddChapter: React.FC = () => {
   const [addChapter] = useAddChapterMutation();
 
   const handleTitleChange = (selectedOption: SingleValue<{ value: string; label: string }>) => {
-    setSelectedTitle(selectedOption);
+    if (selectedOption) {
+      setSelectedTitle(selectedOption);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    setImages(prevImages => [...prevImages, ...files]);
+    const files = e.target.files as FileList;
+    const imageFiles = Array.from(files).map(file => Object.assign(file, { preview: URL.createObjectURL(file) }));
+    setImages(prevImages => [...prevImages, ...imageFiles]);
   };
 
   const handleAddImageClick = () => {
@@ -62,31 +69,35 @@ export const AddChapter: React.FC = () => {
     }
   };
 
-  const handleImageClick = (side: 'left' | 'right') => {
+  const handleImageClick = (clickedSide: 'left' | 'right') => {
     if (viewMode === 'flip') {
-      if (side === 'left' && currentPage > 0) {
-        setCurrentPage(prev => prev - 1);
-      } else if (side === 'right' && currentPage < images.length - 1) {
-        setCurrentPage(prev => prev + 1);
+      if (clickedSide === 'left' && currentPage > 0) {
+        setCurrentPage(prevPage => prevPage - 1);
+      } else if (clickedSide === 'right' && currentPage < images.length - 1) {
+        setCurrentPage(prevPage => prevPage + 1);
       }
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!selectedTitle) {
-      alert('Пожалуйста, выберите произведение.');
+      alert('Пожалуйста, выберите название.');
+      return;
+    }
+
+    if (!images.length) {
+      alert('Пожалуйста, добавьте изображения.');
       return;
     }
 
     const formData = new FormData();
     formData.append('titleSlug', selectedTitle.value);
-    formData.append('chapterTitle', chapterTitle);
+    formData.append('chapterTitle', chapterTitle.trim());
     images.forEach((image, index) => {
       formData.append(`chapterContent[${index}]`, image);
-      // Выводим данные в консоль
-      console.log('Отправка данных:', {
+      console.log('Отправленные данные:', {
         title_slug: selectedTitle.value,
         chapter_name: chapterTitle,
         page_number: index + 1,
@@ -95,7 +106,7 @@ export const AddChapter: React.FC = () => {
     });
 
     try {
-      await addChapter(formData);
+      await addChapter({ formData, titleSlug: selectedTitle.value });
       alert('Глава успешно добавлена!');
       setChapterTitle('');
       setImages([]);
@@ -114,7 +125,7 @@ export const AddChapter: React.FC = () => {
         onInputChange={setSearchQuery}
         onChange={handleTitleChange}
         isLoading={isSearchLoading}
-        placeholder="Поиск произведения..."
+        placeholder="Поиск названия..."
         className={styles.select}
         value={selectedTitle}
       />
@@ -129,7 +140,7 @@ export const AddChapter: React.FC = () => {
           />
         </div>
         <div className={styles.infoItem}>
-          <label className={styles.label}>Содержание главы:</label>
+          <label className={styles.label}>Контент главы:</label>
           <input
             type="file"
             accept="image/*"
@@ -140,10 +151,10 @@ export const AddChapter: React.FC = () => {
           />
           <div className={styles.buttonContainer}>
             <button type="button" onClick={handleAddImageClick} className={styles.addButton}>
-              Добавить страницы
+              Добавить изображения
             </button>
             <button type="button" onClick={toggleViewMode} className={styles.viewToggle}>
-              {viewMode === 'scroll' ? 'Перелистывание' : 'Лента'}
+              {viewMode === 'scroll' ? 'Листать' : 'Перелистывать'}
             </button>
             <button type="button" onClick={toggleEditingMode} className={styles.viewToggle}>
               {isEditing ? 'Сохранить порядок' : 'Редактировать порядок'}
@@ -154,7 +165,7 @@ export const AddChapter: React.FC = () => {
               {viewMode === 'scroll' && images.map((image, index) => (
                 <div key={index} className={styles.imageContainer}>
                   <img
-                    src={URL.createObjectURL(image)}
+                    src={image.preview}
                     alt={`Страница ${index + 1}`}
                     className={styles.imagePreview}
                   />
@@ -169,20 +180,15 @@ export const AddChapter: React.FC = () => {
               {viewMode === 'flip' && images.length > 0 && (
                 <div className={styles.flipView}>
                   <img
-                    src={URL.createObjectURL(images[currentPage])}
+                    src={images[currentPage].preview}
                     alt={`Страница ${currentPage + 1}`}
                     className={styles.flipImage}
                     onClick={(e) => {
                       const rect = e.currentTarget.getBoundingClientRect();
-                      const posX = e.clientX - rect.left;
+                      const clickPositionX = e.clientX - rect.left;
                       const halfWidth = rect.width / 2;
-                      if (posX < halfWidth) {
-                        // Нажатие на левую часть изображения
-                        handleImageClick('left');
-                      } else {
-                        // Нажатие на правую часть изображения
-                        handleImageClick('right');
-                      }
+                      const clickedSide = clickPositionX < halfWidth ? 'left' : 'right';
+                      handleImageClick(clickedSide);
                     }}
                   />
                   <div className={styles.pageCounter}>
