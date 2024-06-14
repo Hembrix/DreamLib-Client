@@ -63,6 +63,27 @@
   border: none;
   border-radius: 0;
   box-shadow: none;
+  cursor: pointer;
+}
+
+.removeImage {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 40px; /* увеличенный размер */
+  height: 40px; /* увеличенный размер */
+  background-color: red;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.removeIcon {
+  color: white;
+  font-weight: bold;
+  font-size: 24px; /* увеличенный размер */
 }
 
 .editButtons {
@@ -134,4 +155,16 @@
 
 .viewToggle {
   background-color: #6c757d;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #333;
+}
+
+.navButton:hover {
+  color: #555;
 }

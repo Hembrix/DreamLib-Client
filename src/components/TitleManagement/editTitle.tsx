@@ -25,7 +25,6 @@ export const EditTitle: React.FC = () => {
     skip: !searchQuery,
   });
 
-  const [titleName, setTitleName] = useState('');
   const [author, setAuthor] = useState('');
   const [description, setDescription] = useState('');
   const [selectedGenres, setSelectedGenres] = useState<{ value: string; label: string }[]>([]);
@@ -38,7 +37,6 @@ export const EditTitle: React.FC = () => {
 
   useEffect(() => {
     if (titleData) {
-      setTitleName(titleData.title);
       setAuthor(titleData.author);
       setDescription(titleData.description);
       setSelectedGenres(titleData.genres.map((genre: string) => ({ value: genre, label: genre })));
@@ -74,7 +72,6 @@ export const EditTitle: React.FC = () => {
   const clearFields = () => {
     setSearchQuery(''); // Очищаем поле поиска
     setTitleSlug(null); // Устанавливаем выбранное произведение в null
-    setTitleName('');
     setAuthor('');
     setDescription('');
     setSelectedGenres([]);
@@ -89,7 +86,6 @@ export const EditTitle: React.FC = () => {
     e.preventDefault();
 
     console.log('Отправляемые данные:');
-    console.log('Название:', titleName);
     console.log('Автор:', author);
     console.log('Описание:', description);
     console.log('Жанры:', selectedGenres);
@@ -99,7 +95,6 @@ export const EditTitle: React.FC = () => {
     console.log('Изображение:', image);
 
     const formData = new FormData();
-    formData.append('title_name', titleName);
     formData.append('author', author);
     formData.append('description', description);
     formData.append('genre_names', JSON.stringify(selectedGenres.map(genre => genre.value)));
@@ -174,23 +169,14 @@ export const EditTitle: React.FC = () => {
             <div className={styles.placeholderText}>Нажмите для загрузки изображения</div>
           )}
           <input
-          type="file"
-          accept="image/jpeg,image/png,image/webp,image/jpg"
-          onChange={handleFileChange}
-          ref={fileInputRef}
-          className={styles.fileInput}
-        />
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/jpg"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+            className={styles.fileInput}
+          />
         </div>
         <div className={styles.infoContainer}>
-          <div className={styles.infoItem}>
-            <label className={styles.label}>Название:</label>
-            <input
-              type="text"
-              value={titleName}
-              onChange={(e) => setTitleName(e.target.value)}
-              className={styles.input}
-            />
-          </div>
           <div className={styles.infoItem}>
             <label className={styles.label}>Автор:</label>
             <input
@@ -200,17 +186,17 @@ export const EditTitle: React.FC = () => {
               className={styles.input}
             />
           </div>
+          <div className={styles.infoItem}>
+            <label className={styles.label}>Описание:</label>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className={styles.textarea}
+            />
+          </div>
         </div>
       </div>
       <form onSubmit={handleSubmit} className={styles.form}>
-        <div className={styles.infoItem}>
-          <label className={styles.label}>Описание:</label>
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className={styles.textarea}
-          />
-        </div>
         <div className={styles.infoItem}>
           <label className={styles.label}>Жанры:</label>
           <Select
@@ -239,7 +225,7 @@ export const EditTitle: React.FC = () => {
             <label className={styles.label}>Тип:</label>
             <Select
               options={filtersData?.types_of_work.map(type => ({ value: type, label: type })) || []}
-              value={selectedType}
+                            value={selectedType}
               onChange={(newValue: { value: string; label: string } | null) =>
                 setSelectedType(newValue)
               }
@@ -269,3 +255,4 @@ export const EditTitle: React.FC = () => {
   );
 };
 
+export default EditTitle;

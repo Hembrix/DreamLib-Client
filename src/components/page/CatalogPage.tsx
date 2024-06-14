@@ -18,7 +18,7 @@ export const CatalogPage: React.FC = () => {
   const [maxYearFilter, setMaxYearFilter] = useState<string | null>(null);
   const [minChaptersFilter, setMinChaptersFilter] = useState<string | null>(null);
   const [maxChaptersFilter, setMaxChaptersFilter] = useState<string | null>(null);
-  const [showFilters, setShowFilters] = useState(false); // State to manage filters visibility
+  const [showFilters, setShowFilters] = useState(false);
 
   const filterParams: FilterParams = {
     title_types: typeFilter.length ? typeFilter : undefined,
@@ -44,8 +44,6 @@ export const CatalogPage: React.FC = () => {
   };
 
   const applyFilters = () => {
-    // Применить фильтры...
-    // Закрыть фильтры после применения
     setShowFilters(false);
   };
 
@@ -62,7 +60,6 @@ export const CatalogPage: React.FC = () => {
     <div className={styles.catalogContainer}>
       <div className={styles.header}>
         <h3 className={styles.catalogTitle}>Каталог</h3>
-        {/* Показывать кнопку только на мобильных устройствах */}
         <button className={`${styles.toggleFiltersBtn} ${styles.mobileOnly}`} onClick={() => setShowFilters(!showFilters)}>
            фильтры
         </button>
@@ -181,7 +178,6 @@ export const CatalogPage: React.FC = () => {
                   />
                 </div>
               </div>
-              {/* Показывать кнопку "Применить" только на мобильных устройствах */}
               <button className={`${styles.applyFiltersBtn} ${styles.mobileOnly}`} onClick={applyFilters}>
                 Применить
               </button>

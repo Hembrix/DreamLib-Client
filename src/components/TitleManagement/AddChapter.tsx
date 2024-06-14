@@ -36,14 +36,6 @@ export const AddChapter: React.FC = () => {
     }
   };
 
-  const handlePreviousPage = () => {
-    setCurrentPage(prev => (prev > 0 ? prev - 1 : prev));
-  };
-
-  const handleNextPage = () => {
-    setCurrentPage(prev => (prev < images.length - 1 ? prev + 1 : prev));
-  };
-
   const toggleViewMode = () => {
     setViewMode(prevMode => (prevMode === 'scroll' ? 'flip' : 'scroll'));
   };
@@ -57,6 +49,7 @@ export const AddChapter: React.FC = () => {
       const newImages = [...images];
       [newImages[index - 1], newImages[index]] = [newImages[index], newImages[index - 1]];
       setImages(newImages);
+      setCurrentPage(index - 1);
     }
   };
 
@@ -65,6 +58,17 @@ export const AddChapter: React.FC = () => {
       const newImages = [...images];
       [newImages[index], newImages[index + 1]] = [newImages[index + 1], newImages[index]];
       setImages(newImages);
+      setCurrentPage(index + 1);
+    }
+  };
+
+  const handleImageClick = (side: 'left' | 'right') => {
+    if (viewMode === 'flip') {
+      if (side === 'left' && currentPage > 0) {
+        setCurrentPage(prev => prev - 1);
+      } else if (side === 'right' && currentPage < images.length - 1) {
+        setCurrentPage(prev => prev + 1);
+      }
     }
   };
 
@@ -81,12 +85,13 @@ export const AddChapter: React.FC = () => {
     formData.append('chapterTitle', chapterTitle);
     images.forEach((image, index) => {
       formData.append(`chapterContent[${index}]`, image);
-    });
-
-    console.log('Отправка данных:', {
-      titleSlug: selectedTitle.value,
-      chapterTitle,
-      chapterContent: images,
+      // Выводим данные в консоль
+      console.log('Отправка данных:', {
+        title_slug: selectedTitle.value,
+        chapter_name: chapterTitle,
+        page_number: index + 1,
+        image_data: image,
+      });
     });
 
     try {
@@ -125,14 +130,6 @@ export const AddChapter: React.FC = () => {
         </div>
         <div className={styles.infoItem}>
           <label className={styles.label}>Содержание главы:</label>
-          <div className={styles.buttonContainer}>
-            <button type="button" onClick={toggleViewMode} className={styles.viewToggle}>
-              {viewMode === 'scroll' ? 'Перелистывание' : 'Лента'}
-            </button>
-            <button type="button" onClick={toggleEditingMode} className={styles.viewToggle}>
-              {isEditing ? 'Сохранить порядок' : 'Редактировать порядок'}
-            </button>
-          </div>
           <input
             type="file"
             accept="image/*"
@@ -141,6 +138,17 @@ export const AddChapter: React.FC = () => {
             ref={fileInputRef}
             className={styles.fileInput}
           />
+          <div className={styles.buttonContainer}>
+            <button type="button" onClick={handleAddImageClick} className={styles.addButton}>
+              Добавить страницы
+            </button>
+            <button type="button" onClick={toggleViewMode} className={styles.viewToggle}>
+              {viewMode === 'scroll' ? 'Перелистывание' : 'Лента'}
+            </button>
+            <button type="button" onClick={toggleEditingMode} className={styles.viewToggle}>
+              {isEditing ? 'Сохранить порядок' : 'Редактировать порядок'}
+            </button>
+          </div>
           {images.length > 0 && (
             <div className={styles.viewModeToggleContainer}>
               {viewMode === 'scroll' && images.map((image, index) => (
@@ -160,9 +168,23 @@ export const AddChapter: React.FC = () => {
               ))}
               {viewMode === 'flip' && images.length > 0 && (
                 <div className={styles.flipView}>
-                  <button type="button" onClick={handlePreviousPage} className={styles.navButton}>&larr;</button>
-                  <img src={URL.createObjectURL(images[currentPage])} alt={`Страница ${currentPage + 1}`} className={styles.flipImage} />
-                  <button type="button" onClick={handleNextPage} className={styles.navButton}>&rarr;</button>
+                  <img
+                    src={URL.createObjectURL(images[currentPage])}
+                    alt={`Страница ${currentPage + 1}`}
+                    className={styles.flipImage}
+                    onClick={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const posX = e.clientX - rect.left;
+                      const halfWidth = rect.width / 2;
+                      if (posX < halfWidth) {
+                        // Нажатие на левую часть изображения
+                        handleImageClick('left');
+                      } else {
+                        // Нажатие на правую часть изображения
+                        handleImageClick('right');
+                      }
+                    }}
+                  />
                   <div className={styles.pageCounter}>
                     {currentPage + 1} / {images.length}
                   </div>
@@ -172,9 +194,6 @@ export const AddChapter: React.FC = () => {
           )}
         </div>
         <div className={styles.buttonContainer}>
-          <button type="button" onClick={handleAddImageClick} className={styles.addButton}>
-            Добавить страницы
-          </button>
           <button type="submit" className={styles.submitButton}>Добавить главу</button>
         </div>
       </form>
