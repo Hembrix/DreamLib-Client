@@ -70,6 +70,19 @@ export const EditTitle: React.FC = () => {
     }
   };
 
+  const clearFields = () => {
+    setSearchQuery('');
+    setTitleName('');
+    setAuthor('');
+    setDescription('');
+    setSelectedGenres([]);
+    setSelectedStatus(null);
+    setSelectedType(null);
+    setTranslationStatus(null);
+    setImage(null);
+    setImageUrl(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -83,29 +96,26 @@ export const EditTitle: React.FC = () => {
     console.log('Статус перевода:', translationStatus);
     console.log('Изображение:', image);
 
-    const genreValues = selectedGenres.map(genre => genre.value);
-
     const formData = new FormData();
     formData.append('title_name', titleName);
     formData.append('author', author);
     formData.append('description', description);
-    formData.append('genre_names', JSON.stringify(genreValues));
+    formData.append('genre_names', JSON.stringify(selectedGenres.map(genre => genre.value)));
     formData.append('title_status_name', selectedStatus!.value);
     formData.append('type_name', selectedType!.value);
     formData.append('translation_status_name', translationStatus!.value);
 
     if (image) {
-        formData.append('image_title', image); 
+      formData.append('image_title', image);
     }
 
     try {
-        await editTitle({ formData, titleSlug });
-        console.log('Произведение успешно обновлено!');
-    } catch (error) {
-        console.error('Ошибка при обновлении произведения:', error);
-    }
-};
+      await editTitle({ formData, titleSlug });
 
+    } catch (error) {
+      console.error('Ошибка при обновлении произведения:', error);
+    }
+  };
 
   const handleDelete = async () => {
     if (!window.confirm('Вы уверены, что хотите удалить произведение?')) {
@@ -117,6 +127,7 @@ export const EditTitle: React.FC = () => {
     try {
       await deleteTitle(titleSlug!);
       console.log('Произведение успешно удалено!');
+      clearFields(); // Очистить поля после успешного удаления
     } catch (error) {
       console.error('Ошибка при удалении произведения:', error);
     } finally {
@@ -148,18 +159,19 @@ export const EditTitle: React.FC = () => {
       />
       <div className={styles.flexContainer}>
         <div className={styles.imageContainer} onClick={handleImageClick}>
-          {imageUrl ? (
+          {imageUrl && (
             <img src={`${BASE_URL}${imageUrl}`} alt="Выбранное изображение" className={styles.imagePreview} />
-          ) : (
+          )}
+          {!imageUrl && (
             <div className={styles.placeholderText}>Нажмите для загрузки изображения</div>
           )}
           <input
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/jpg"
-            onChange={handleFileChange}
-            ref={fileInputRef}
-            className={styles.fileInput}
-          />
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/jpg"
+          onChange={handleFileChange}
+          ref={fileInputRef}
+          className={styles.fileInput}
+        />
         </div>
         <div className={styles.infoContainer}>
           <div className={styles.infoItem}>
@@ -248,4 +260,5 @@ export const EditTitle: React.FC = () => {
     </div>
   );
 };
+
 

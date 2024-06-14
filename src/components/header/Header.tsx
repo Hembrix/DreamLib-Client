@@ -90,6 +90,7 @@ export const Header: React.FC = () => {
                   {isAddContentSubmenuOpen && (
                     <>
                       <Link to="/add-title" className={styles.profileMenuSubItem}>Добавить тайтл</Link>
+                      <Link to="/edit-title" className={styles.profileMenuSubItem}>Редактировать тайтл</Link>
                       <Link to="/add-chapter" className={styles.profileMenuSubItem}>Добавить главу</Link>
                     </>
                   )}
