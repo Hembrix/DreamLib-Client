@@ -6,7 +6,7 @@ export const api = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     postTitle: builder.mutation({
       query: (formData: FormData) => ({
-        url: 'api/add/titles/',
+        url: 'api/add/titles/${titleSlug}',
         method: 'POST',
         body: formData,
         headers: {

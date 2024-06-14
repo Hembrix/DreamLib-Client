@@ -11,6 +11,7 @@ import { ComicsPage } from './components/page/ComicsPage';
 import { Reader } from './components/reader/Reader';
 import { ComicsTopPage } from './components/page/ComicsTopPage';
 import { AddTitle } from './components/TitleManagement/addTitle';
+import { EditTitle } from './components/TitleManagement/editTitle';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -25,6 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/comics/:titleSlug" element={<ComicsPage/>}/>
           <Route path="/comics/:titleSlug/:chapter_number" element={<Reader/>} />
           <Route path="/add-title" element={<AddTitle/>} />
+          <Route path='/edit-title' element={<EditTitle/>}/>
         </Routes>
         <Footer/>
       </Router>

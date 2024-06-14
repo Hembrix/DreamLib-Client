@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
     if (!isAuthenticated) {
       setAuthModalOpen(true);
     } else {
-      // Действия при нажатии на "Закладки", если пользователь авторизован
+      <Link to="/bookmarks" className={styles.navLink}>Закладки</Link>
     }
   };
 

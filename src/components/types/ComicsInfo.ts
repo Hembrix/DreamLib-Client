@@ -7,5 +7,6 @@ export interface ComicsInfo {
     average_rating: number;
     genres: string[];
     titleSlug: string;
+    translationStatus:string
   }
   
