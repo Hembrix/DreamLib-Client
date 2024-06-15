@@ -5,6 +5,8 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   max-width: 600px;
   margin: 0 auto;
+  position: relative;
+  padding-bottom: 80px; /* Extra space for the fixed button */
 }
 
 .formTitle {
@@ -151,6 +153,10 @@
 
 .submitButton {
   background-color: #007bff;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .viewToggle {
