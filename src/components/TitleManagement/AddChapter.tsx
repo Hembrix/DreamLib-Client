@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import Select, {SingleValue } from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import styles from './AddChapter.module.css';
 import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResult';
 import { useAddChapterMutation } from '../../store/dreamLibInjects/postChapter';
@@ -33,8 +33,10 @@ export const AddChapter: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files as FileList;
-    const imageFiles = Array.from(files).map(file => Object.assign(file, { preview: URL.createObjectURL(file) }));
-    setImages(prevImages => [...prevImages, ...imageFiles]);
+    const imageFiles = Array.from(files).map((file) =>
+      Object.assign(file, { preview: URL.createObjectURL(file) })
+    );
+    setImages((prevImages) => [...prevImages, ...imageFiles]);
   };
 
   const handleAddImageClick = () => {
@@ -44,7 +46,7 @@ export const AddChapter: React.FC = () => {
   };
 
   const toggleViewMode = () => {
-    setViewMode(prevMode => (prevMode === 'scroll' ? 'flip' : 'scroll'));
+    setViewMode((prevMode) => (prevMode === 'scroll' ? 'flip' : 'scroll'));
   };
 
   const toggleEditingMode = () => {
@@ -72,11 +74,15 @@ export const AddChapter: React.FC = () => {
   const handleImageClick = (clickedSide: 'left' | 'right') => {
     if (viewMode === 'flip') {
       if (clickedSide === 'left' && currentPage > 0) {
-        setCurrentPage(prevPage => prevPage - 1);
+        setCurrentPage((prevPage) => prevPage - 1);
       } else if (clickedSide === 'right' && currentPage < images.length - 1) {
-        setCurrentPage(prevPage => prevPage + 1);
+        setCurrentPage((prevPage) => prevPage + 1);
       }
     }
+  };
+
+  const handleDeleteImage = (index: number) => {
+    setImages(images.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -121,7 +127,7 @@ export const AddChapter: React.FC = () => {
     <div className={styles.formContainerLight}>
       <h2 className={styles.formTitle}>Добавить главу</h2>
       <Select
-        options={searchResults.map(result => ({ value: result.titleSlug, label: result.title }))}
+        options={searchResults.map((result) => ({ value: result.titleSlug, label: result.title }))}
         onInputChange={setSearchQuery}
         onChange={handleTitleChange}
         isLoading={isSearchLoading}
@@ -162,37 +168,44 @@ export const AddChapter: React.FC = () => {
           </div>
           {images.length > 0 && (
             <div className={styles.viewModeToggleContainer}>
-              {viewMode === 'scroll' && images.map((image, index) => (
-                <div key={index} className={styles.imageContainer}>
-                  <img
-                    src={image.preview}
-                    alt={`Страница ${index + 1}`}
-                    className={styles.imagePreview}
-                  />
-                  {isEditing && (
-                    <div className={styles.editButtons}>
-                      <button type="button" onClick={() => movePageUp(index)}>&uarr;</button>
-                      <button type="button" onClick={() => movePageDown(index)}>&darr;</button>
-                    </div>
-                  )}
-                </div>
-              ))}
+              {viewMode === 'scroll' &&
+                images.map((image, index) => (
+                  <div key={index} className={styles.imageContainer}>
+                    <img src={image.preview} alt={`Страница ${index + 1}`} className={styles.imagePreview} />
+                    {isEditing && (
+                      <>
+                        <div className={styles.removeImage} onClick={() => handleDeleteImage(index)}>
+                          <span className={styles.removeIcon}>&times;</span>
+                        </div>
+                        <div className={styles.editButtons}>
+                          <button type="button" onClick={() => movePageUp(index)}>
+                            &uarr;
+                          </button>
+                          <button type="button" onClick={() => movePageDown(index)}>
+                            &darr;
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                ))}
               {viewMode === 'flip' && images.length > 0 && (
                 <div className={styles.flipView}>
                   <img
                     src={images[currentPage].preview}
                     alt={`Страница ${currentPage + 1}`}
                     className={styles.flipImage}
-                    onClick={(e) => {
-                      const rect = e.currentTarget.getBoundingClientRect();
-                      const clickPositionX = e.clientX - rect.left;
-                      const halfWidth = rect.width / 2;
-                      const clickedSide = clickPositionX < halfWidth ? 'left' : 'right';
-                      handleImageClick(clickedSide);
-                    }}
                   />
                   <div className={styles.pageCounter}>
                     {currentPage + 1} / {images.length}
+                  </div>
+                  <div className={styles.navButtonContainer}>
+                    <button type="button" onClick={() => handleImageClick('left')} className={styles.navButton}>
+                      &larr; Назад
+                    </button>
+                    <button type="button" onClick={() => handleImageClick('right')} className={styles.navButton}>
+                      Вперед &rarr;
+                    </button>
                   </div>
                 </div>
               )}
@@ -200,7 +213,9 @@ export const AddChapter: React.FC = () => {
           )}
         </div>
         <div className={styles.buttonContainer}>
-          <button type="submit" className={styles.submitButton}>Добавить главу</button>
+          <button type="submit" className={styles.submitButton}>
+            Добавить главу
+          </button>
         </div>
       </form>
     </div>

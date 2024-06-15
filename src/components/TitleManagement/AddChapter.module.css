@@ -102,6 +102,7 @@
 
 .flipView {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -113,20 +114,33 @@
 }
 
 .pageCounter {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
+  margin-top: 10px;
   background-color: rgba(0, 0, 0, 0.7);
   color: #fff;
   padding: 5px 10px;
   border-radius: 4px;
 }
 
+.navButtonContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+}
+
 .navButton {
-  background: none;
+  background-color: #007bff;
   border: none;
-  font-size: 24px;
+  border-radius: 4px;
+  color: white;
+  padding: 10px 20px;
   cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.navButton:hover {
+  background-color: #0056b3;
 }
 
 .buttonContainer {
@@ -161,16 +175,4 @@
 
 .viewToggle {
   background-color: #6c757d;
-}
-
-.navButton {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 24px;
-  color: #333;
-}
-
-.navButton:hover {
-  color: #555;
 }
