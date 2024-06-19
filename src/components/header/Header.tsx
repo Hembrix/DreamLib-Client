@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Header.module.css';
 import { SearchModal } from '../SearchModal/SearchModal';
@@ -13,13 +13,28 @@ export const Header: React.FC = () => {
   const [isProfileMenuOpen, setProfileMenuOpen] = useState(false);
   const [isAddContentSubmenuOpen, setAddContentSubmenuOpen] = useState(false);
   const [userInfo, setUserInfo] = useState<LoginResponse | null>(null);
+  const profileMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const authData = localStorage.getItem('authData');
     if (authData) {
+      const parsedAuthData = JSON.parse(authData);
       setIsAuthenticated(true);
-      setUserInfo(JSON.parse(authData));
+      setUserInfo(parsedAuthData);
     }
+  }, []);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target as Node)) {
+        setProfileMenuOpen(false);
+      }
+    }
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
   }, []);
 
   const handleSearchClick = () => {
@@ -41,13 +56,6 @@ export const Header: React.FC = () => {
     setUserInfo(null);
   };
 
-  const handleBookmarksClick = () => {
-    if (!isAuthenticated) {
-      setAuthModalOpen(true);
-    } else {
-      <Link to="/bookmarks" className={styles.navLink}>Закладки</Link>
-    }
-  };
 
   const handleProfileMenuToggle = () => {
     setProfileMenuOpen(!isProfileMenuOpen);
@@ -56,6 +64,8 @@ export const Header: React.FC = () => {
   const handleAddContentClick = () => {
     setAddContentSubmenuOpen(!isAddContentSubmenuOpen);
   };
+
+  const isAdmin = userInfo?.user.groups.includes('Админ');
 
   return (
     <>
@@ -70,7 +80,7 @@ export const Header: React.FC = () => {
         </div>
         <div className={styles.extraControls}>
           {isAuthenticated ? (
-            <div className={styles.profileContainer}>
+            <div className={styles.profileContainer} ref={profileMenuRef}>
               <img
                 src={`${BASE_URL}${userInfo?.user.image}`}
                 alt="Profile"
@@ -83,15 +93,21 @@ export const Header: React.FC = () => {
                     <img src={`${BASE_URL}${userInfo?.user.image}`} alt="Profile" className={styles.profileMenuIcon} />
                     <span>{userInfo?.user.username}</span>
                   </div>
-                  <button className={styles.profileMenuItem} onClick={handleAddContentClick}>
-                    Добавить контент
-                    <span className={styles.addContentIcon}>{isAddContentSubmenuOpen ? '-' : '+'}</span>
-                  </button>
-                  {isAddContentSubmenuOpen && (
+                  <button className={styles.profileMenuItem}>Закладки</button>
+                  {isAdmin && (
                     <>
-                      <Link to="/add-title" className={styles.profileMenuSubItem}>Добавить тайтл</Link>
-                      <Link to="/edit-title" className={styles.profileMenuSubItem}>Редактировать тайтл</Link>
-                      <Link to="/add-chapter" className={styles.profileMenuSubItem}>Добавить главу</Link>
+                      <button className={styles.profileMenuItem} onClick={handleAddContentClick}>
+                        Добавить контент
+                        <span className={styles.addContentIcon}>{isAddContentSubmenuOpen ? '-' : '+'}</span>
+                      </button>
+                      {isAddContentSubmenuOpen && (
+                        <>
+                          <Link to="/add-title" className={styles.profileMenuSubItem}>Добавить тайтл</Link>
+                          <Link to="/edit-title" className={styles.profileMenuSubItem}>Редактировать тайтл</Link>
+                          <Link to="/add-chapter" className={styles.profileMenuSubItem}>Добавить главу</Link>
+                          <Link to="/delete-chapter" className={styles.profileMenuSubItem}>Удалить главу</Link>
+                        </>
+                      )}
                     </>
                   )}
                   <button className={styles.profileMenuItem} onClick={handleLogout}>
@@ -109,8 +125,7 @@ export const Header: React.FC = () => {
       <div className={styles.mobileNav}>
         <Link to="/catalog" className={styles.navLink}>Каталог</Link>
         <Link to="/top" className={styles.navLink}>Топы</Link>
-        <button className={styles.searchButton} onClick={handleSearchClick}>Поиск</button>
-        <button className={styles.bookmarksButton} onClick={handleBookmarksClick}>Закладки</button>
+        <button className={styles.searchButton} onClick={handleSearchClick}>Поиск</button>    
       </div>
       <SearchModal isOpen={isSearchModalOpen} onClose={handleCloseModal} />
       <AuthModal isOpen={isAuthModalOpen} onClose={handleAuthModalClose} />

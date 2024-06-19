@@ -1,23 +1,22 @@
-/* AuthModal.module.css */
-
 .modalOverlay {
+  z-index: 4;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* полупрозрачный фон */
+  background-color: rgba(0, 0, 0, 0.5); 
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .modal {
-  background-color: #fefefe;
+  background-color: #fade8b;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  width: 400px; /* Фиксированная ширина модального окна */
+  width: 400px; 
 }
 
 .modalContent {
@@ -38,7 +37,7 @@
 }
 
 .switchLink {
-  color: #007bff;
+  color: #4400ff;
   cursor: pointer;
 }
 

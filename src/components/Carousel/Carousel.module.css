@@ -1,13 +1,18 @@
-/* carousel.css */
+/* Carousel.module.css */
 .carouselContainer {
-    overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
 }
 
 .carousel {
     display: inline-flex;
-    gap: 16px;
+    gap: 10px; /* Отступ между карточками */
+    align-items: flex-start; /* Выравнивание по верхнему краю */
+    width: 100%; /* Занимаем всю доступную ширину */
+}
+
+.carousel > * {
+    flex: 0 0 auto; /* Карточки не растягиваются */
 }
 
 .carousel::-webkit-scrollbar {
@@ -16,12 +21,12 @@
 
 @media (max-width: 768px) {
     .carousel {
-        gap: 10px;
+        gap: 10px; /* Уменьшаем отступ для меньших экранов */
     }
 }
 
 @media (max-width: 480px) {
     .carousel {
-        gap: 5px;
+        gap: 5px; /* Уменьшаем отступ еще больше для самых маленьких экранов */
     }
 }

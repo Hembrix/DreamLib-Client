@@ -5,6 +5,7 @@
 }
 
 .mainContent {
+  z-index: 1;
   display: flex;
   gap: 20px;
   align-items: flex-start;
@@ -23,7 +24,7 @@
   position: fixed;
   top: 20px;
   right: 20px;
-  z-index: 1000;
+  z-index: 2;
 }
 
 .filtersContainer {
@@ -95,6 +96,12 @@
 }
 
 @media (min-width: 768px) {
+  .catalogContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+  }
+  
   .mobileOnly {
     display: none;
   }
@@ -114,10 +121,12 @@
     width: auto;
   }
   .catalog {
+    flex-wrap: wrap;
     order: -1; /* Перемещаем каталог в начало */
     flex: 1; /* Занимает оставшееся пространство */
     display: flex;
   }
+  
   .filtersContainer {
     width: 300px; /* Ширина боковой панели с фильтрами на десктопе */
   }

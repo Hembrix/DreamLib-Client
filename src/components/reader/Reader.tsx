@@ -19,7 +19,7 @@ export const Reader: React.FC = () => {
     if (chapterData) {
       const chapterPages: string[] = chapterData.pages.map((page: Chapter) => page.image_data);
       setPages(chapterPages);
-      setCurrentPage(0); // Reset current page to first page on chapter change
+      setCurrentPage(0); 
     }
   }, [chapterData, chapterNumber, titleSlug]);
 
@@ -41,6 +41,7 @@ export const Reader: React.FC = () => {
   const handleChapterChange = (newChapterNumber: number) => {
     setCurrentPage(0); // Reset current page to first page on chapter change
     navigate(`/comics/${titleSlug}/${newChapterNumber}`);
+    window.location.reload(); // Обновление страницы
   };
 
   return (
@@ -57,7 +58,7 @@ export const Reader: React.FC = () => {
           &rarr;
         </button>
         <button onClick={toggleViewMode} className="view-toggle">
-          {viewMode === 'scroll' ? 'Перелистывание' : 'Лента'}
+          {viewMode === 'scroll' ? 'Постранично' : 'Лента'}
         </button>
       </div>
       <div className={`reader-content ${viewMode}`} onClick={viewMode === 'flip' ? handlePageClick : undefined}>

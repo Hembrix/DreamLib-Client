@@ -3,4 +3,5 @@ export interface FilterData {
     genres: string[];
     status: string[];
     translation_status: string[];
+    translator_group:string;
   }

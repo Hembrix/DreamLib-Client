@@ -4,8 +4,6 @@ import { Link } from 'react-router-dom';
 import { Title } from '../types/TitleListInterface';
 import { BASE_URL } from '../utils/baseUrl';
 
-
-
 export const Card: React.FC<Title> = ({ imagetitle, title, titleSlug, type_of_work, average_rating }) => {
     return (
         <Link to={`/comics/${titleSlug}`} className={styles.card}>
@@ -19,3 +17,5 @@ export const Card: React.FC<Title> = ({ imagetitle, title, titleSlug, type_of_wo
         </Link>
     );
 };
+
+

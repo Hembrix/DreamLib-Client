@@ -1,0 +1,34 @@
+.card {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+    background-color: #e9e998;
+}
+
+.imgContainer {
+    margin-right: 20px;
+    align-self: flex-start;
+}
+
+.textContainer {
+    flex: 1;
+}
+
+.image {
+    max-width: 80px;
+    height: auto; 
+}
+
+.title {
+    font-size: 1.5rem;
+    color: black;
+    margin-bottom: 5px;
+}
+.link{
+ text-decoration: none;
+}
+.chapterTitle {
+    font-size: 1rem;
+    color: black;
+    margin-top: 5px;
+}

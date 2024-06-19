@@ -1,4 +1,4 @@
-import { newPopularTitleList, newTitleList, randomTitleList } from "../../components/types/TitleListInterface";
+import { newPopularTitleList, newTitleList, randomTitleList, LastChaptersUpdateList  } from "../../components/types/TitleListInterface";
 import { baseApi } from "../../components/utils/baseUrl";
 
 export const api = baseApi.injectEndpoints({
@@ -17,6 +17,11 @@ export const api = baseApi.injectEndpoints({
       query: () => ({
         url: 'api/home/recent/'
       })
+    }),
+    getLastChaptersList: builder.query<LastChaptersUpdateList, void>({
+      query: () => ({
+        url: 'api/home/recent-chapters/'
+      })
     })
   })
       
@@ -26,5 +31,6 @@ export const api = baseApi.injectEndpoints({
 export const {  
     useGetRandomTitleListQuery,
     useGetNewPopularTitleListQuery,
-    useGetNewTitleListQuery
+    useGetNewTitleListQuery,
+    useGetLastChaptersListQuery
 } = api;

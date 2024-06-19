@@ -8,28 +8,30 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
   display: flex;
-  justify-content: center;
+  justify-content: center; /* Центрирование контента по горизонтали */
   align-items: center;
+  z-index: 4;
 }
 
 .modalContent {
-  background: #2c2c2c;
+  background: #f5f5dc; /* Бежевый цвет фона */
   border-radius: 10px;
   padding: 20px;
-  width: 400px;
-  max-width: 90%;
+  width: 90%; /* Изменим ширину на 90% */
+  max-width: 400px; /* Максимальная ширина 400px */
+  min-width: 280px; /* Минимальная ширина 280px */
+  text-align: center; /* Выравнивание текста по центру */
 }
 
 .searchInput {
-  width: 100%;
-  padding: 12px;
+  width: calc(100% - 40px); /* Вычтем отступы слева и справа */
   border: none;
   border-radius: 25px;
   text-align: center;
   font-size: 16px;
   background-color: #fff; /* Цвет фона поля ввода */
   color: #333; /* Цвет текста поля ввода */
-  margin-bottom: 20px; /* Отступ снизу */
+  margin-bottom: 20px; /* Добавим нижний отступ */
 }
 
 .searchInput::placeholder {
@@ -46,7 +48,7 @@
 }
 
 .resultItem:hover {
-  background-color: #444; /* Изменение цвета фона при наведении */
+  background-color: #ddd; /* Изменение цвета фона при наведении */
 }
 
 .resultItem img {
@@ -57,20 +59,5 @@
 }
 
 .resultText {
-  color: white;
-}
-
-.closeButton {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 24px;
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-
-.closeButton:hover {
-  color: #ccc; /* Изменение цвета кнопки при наведении */
+  color: #333; /* Черный цвет текста */
 }

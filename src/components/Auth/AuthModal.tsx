@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import AuthForm from './Login';
-import RegisterForm from './Registration';
-import styles from './AuthModal.module.css'; // Подключаем модульные стили
+import AuthForm from './AuthForm';
+import RegisterForm from './RegisterForm';
+import styles from './AuthModal.module.css'; 
 
 interface AuthModalProps {
   isOpen: boolean;

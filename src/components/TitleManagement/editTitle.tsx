@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Select, { MultiValue, SingleValue } from 'react-select';
-import styles from './AddTitle.module.css';
+import styles from './addTitle.module.css';
 import { useGetTitleQuery } from '../../store/dreamLibInjects/GetComicsInfo';
 import { useEditTitleMutation, useDeleteTitleMutation } from '../../store/dreamLibInjects/editTitle';
 import { useGetFiltersQuery } from '../../store/dreamLibInjects/GetFilter';
@@ -11,9 +11,9 @@ import { BASE_URL } from '../utils/baseUrl';
 export const EditTitle: React.FC = () => {
   const params = useParams<{ titleSlug: string }>();
   const navigate = useNavigate();
-  const [titleSlug, setTitleSlug] = useState<string | null>(params.titleSlug ?? null);
+  const [titleSlug, setTitleSlug] = useState<string>(params.titleSlug ?? '');
   const { data: filtersData } = useGetFiltersQuery();
-  const { data: titleData, refetch, isUninitialized } = useGetTitleQuery(titleSlug!, {
+  const { data: titleData, refetch, isUninitialized } = useGetTitleQuery(titleSlug, {
     skip: !titleSlug,
   });
   const [editTitle] = useEditTitleMutation();
@@ -71,7 +71,7 @@ export const EditTitle: React.FC = () => {
   
   const clearFields = () => {
     setSearchQuery(''); // Очищаем поле поиска
-    setTitleSlug(null); // Устанавливаем выбранное произведение в null
+    setTitleSlug(''); // Устанавливаем выбранное произведение в пустую строку
     setAuthor('');
     setDescription('');
     setSelectedGenres([]);
@@ -108,7 +108,6 @@ export const EditTitle: React.FC = () => {
 
     try {
       await editTitle({ formData, titleSlug });
-      // После успешного обновления тайтла переходим на страницу с редактированием без конкретного titleSlug
       navigate('/edit-title/');
       clearFields(); 
     } catch (error) {
@@ -124,11 +123,11 @@ export const EditTitle: React.FC = () => {
     setIsDeleting(true);
 
     try {
-      await deleteTitle(titleSlug!);
+      await deleteTitle(titleSlug);
       console.log('Произведение успешно удалено!');
       clearFields(); // Очистить поля после успешного удаления
       // После успешного удаления тайтла переходим на страницу с редактированием без конкретного titleSlug
-      navigate('edit-title');
+      navigate('/edit-title');
     } catch (error) {
       console.error('Ошибка при удалении произведения:', error);
     } finally {
@@ -225,7 +224,7 @@ export const EditTitle: React.FC = () => {
             <label className={styles.label}>Тип:</label>
             <Select
               options={filtersData?.types_of_work.map(type => ({ value: type, label: type })) || []}
-                            value={selectedType}
+              value={selectedType}
               onChange={(newValue: { value: string; label: string } | null) =>
                 setSelectedType(newValue)
               }

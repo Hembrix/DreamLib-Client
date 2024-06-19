@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePostTitleMutation } from '../../store/dreamLibInjects/postTitle';
 import { useGetFiltersQuery } from '../../store/dreamLibInjects/GetFilter';
 import Select, { MultiValue } from 'react-select';
-import styles from './AddTitle.module.css';
+import styles from './addTitle.module.css';
 
 export const AddTitle: React.FC = () => {
   const [titleName, setTitleName] = useState('');
@@ -62,14 +62,13 @@ export const AddTitle: React.FC = () => {
     formData.append('author', author);
     formData.append('description', description);
     formData.append('title_date', titleDate);
-    formData.append('image_title', image); // Внимание: передаем сам файл, а не его имя
+    formData.append('image_title', image); 
 
     selectedGenres.forEach(genre => formData.append('genre_names', genre.value));
     formData.append('title_status_name', selectedStatus!.value);
     formData.append('type_name', selectedType!.value);
     formData.append('translation_status_name', translationStatus!.value);
 
-    // Вывод отправляемых данных в консоль
     const sendData = {
       title_name: titleName,
       author: author,
@@ -79,7 +78,7 @@ export const AddTitle: React.FC = () => {
       title_status_name: selectedStatus!.value,
       type_name: selectedType!.value,
       translation_status_name: translationStatus!.value,
-      image_title: image.name // Имя изображения для отображения в консоли
+      image_title: image.name 
     };
     console.log('Отправляемые данные:', sendData);
 

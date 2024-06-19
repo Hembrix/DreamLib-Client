@@ -15,6 +15,7 @@ export const ComicsPage: React.FC = () => {
   const { data: commentsInfo, isLoading: isLoadingComments, isError: isErrorComments } = useGetCommentsQuery(titleSlug);
 
   const [activeTab, setActiveTab] = useState('Описание');
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   if (isLoadingComics) {
     return <div>Loading...</div>;
@@ -24,8 +25,16 @@ export const ComicsPage: React.FC = () => {
     return <div>Error loading comic information.</div>;
   }
 
+  const handleToggleDescription = () => {
+    setIsDescriptionExpanded(!isDescriptionExpanded);
+  };
+
+  const description = comicsInfo.description;
+  const truncatedDescription = description.length > 200 ? `${description.substring(0, 200)}...` : description;
+
   return (
     <div className={styles.container}>
+    <div className={styles.container_Image}>
       <div className={styles.stickyContainer}>
         <img
           src={`${BASE_URL}${comicsInfo.imagetitle}`}
@@ -41,15 +50,17 @@ export const ComicsPage: React.FC = () => {
       <div className={styles.contentContainer}>
         <div className={styles.infoContainer}>
           <h1 className={styles.title}>{comicsInfo.title}</h1>
-          <div className={styles.infoContainer}>
-            <p className={styles.label}>Рейтинг</p>
-            <p className={styles.rating}>★{comicsInfo.average_rating}</p>
+          <div className={styles.infoSubContainer}>
+            <div className={styles.infoBlock}>
+              <p className={styles.label}>Рейтинг</p>
+              <p className={styles.rating}>★{comicsInfo.average_rating}</p>
+            </div>
+            <div className={styles.infoBlock}>
+              <p className={styles.label}>Глав</p>
+              <p className={styles.chapterCount}>{chapterList?.chapter_count}</p>
+            </div>
           </div>
-          <div className={styles.infoContainer}>
-            <p className={styles.label}>Глав</p>
-            <p className={styles.chapterCount}>{chapterList?.chapter_count} </p>
-          </div>
-      </div>
+        </div>
 
         <div className={styles.tabs}>
           <button
@@ -71,10 +82,18 @@ export const ComicsPage: React.FC = () => {
             Комментарии
           </button>
         </div>
+
         <div className={styles.content}>
           {activeTab === 'Описание' && (
-            <div className={styles.description}>
-              <p>{comicsInfo.description}</p>
+            <div className={styles.descriptionContainer}>
+              <p className={styles.description}>
+                {isDescriptionExpanded ? description : truncatedDescription}
+              </p>
+              {description.length > 200 && (
+                <button className={styles.expandButton} onClick={handleToggleDescription}>
+                  {isDescriptionExpanded ? 'Скрыть' : 'Раскрыть'}
+                </button>
+              )}
               <div className={styles.tags}>
                 {comicsInfo.genres.map((genre: string, index: number) => (
                   <span key={index} className={styles.tag}>{genre}</span>
@@ -117,6 +136,7 @@ export const ComicsPage: React.FC = () => {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 };

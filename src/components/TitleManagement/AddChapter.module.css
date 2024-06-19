@@ -71,9 +71,9 @@
 .removeImage {
   position: absolute;
   top: 5px;
-  left: 5px;
-  width: 40px; /* увеличенный размер */
-  height: 40px; /* увеличенный размер */
+  right: 5px;
+  width: 30px; 
+  height: 30px; 
   background-color: red;
   border-radius: 4px;
   display: flex;
@@ -85,7 +85,7 @@
 .removeIcon {
   color: white;
   font-weight: bold;
-  font-size: 24px; /* увеличенный размер */
+  font-size: 24px; 
 }
 
 .editButtons {

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { useRegisterMutation } from '../../store/dreamLibInjects/auth';
-import styles from './RegisterForm.module.css'; // Подключаем модульные стили
+import styles from './RegisterForm.module.css';
 
-const fixedSalt = '$2a$10$w6.wqJqDsGh9FQHI28BuXe';  // фиксированная соль
+const fixedSalt = '$2a$10$w6.wqJqDsGh9FQHI28BuXe';  
 
 interface RegisterFormProps {
   onClose: () => void;
@@ -33,10 +33,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
 
     try {
       const hashedPassword = bcrypt.hashSync(password, fixedSalt);
-      console.log('Hashed Password:', hashedPassword);
 
       await register({ username, email, password: hashedPassword }).unwrap();
-      console.log('Registration successful');
 
       setUsername('');
       setEmail('');
@@ -44,7 +42,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
       setConfirmPassword('');
       onClose();
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error('Ошибка при регистрации:', error);
       setIsError(true);
       setErrorMessage('Ошибка при регистрации');
     } finally {

@@ -1,19 +1,24 @@
-/* styles/ComicsPage.module.css */
-
 .container {
   display: flex;
+  justify-content: center;
+}
+
+.container_Image {
+  display: flex;
+  align-items: flex-start;
   padding: 20px;
+  max-width: 1200px; /* Максимальная ширина контейнера */
 }
 
 .stickyContainer {
-  position: fixed;
+  position: sticky;
   top: 20px;
   display: flex;
-  margin-top: 80px;
   flex-direction: column;
   align-items: center;
   background-color: white;
   padding: 20px;
+  margin-right: 20px;
   flex-shrink: 0;
   transition: top 0.3s ease;
 }
@@ -23,12 +28,12 @@
   height: 300px;
   object-fit: cover;
   border-radius: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 .button {
-  width: 100%;
-  padding: 10px 20px;
+  width: 200px;
+  padding: 10px;
   margin-bottom: 10px;
   border: none;
   background: #007bff;
@@ -44,11 +49,13 @@
 
 .contentContainer {
   flex-grow: 1;
-  margin-left: 260px; /* Adjust according to stickyContainer width */
+  max-width: 800px;
+  margin-left: 20px;
 }
 
 .tabs {
   display: flex;
+  justify-content: center;
   margin-bottom: 20px;
 }
 
@@ -72,11 +79,24 @@
   border-radius: 10px;
 }
 
-.description,
-.chapters,
-.comments {
+.descriptionContainer {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.description {
   font-size: 16px;
   line-height: 1.5;
+  margin-bottom: 10px;
+}
+
+.expandButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 10px;
 }
 
 .tags {
@@ -125,36 +145,54 @@
 /* New styles to make elements display in a row with internal elements in a column */
 .infoContainer {
   display: flex;
-  align-items: center; /* Вертикальное выравнивание */
-  justify-content: space-between; /* Горизонтальное распределение */
-  flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку при необходимости */
-  margin-bottom: 20px; /* Отступ снизу */
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
 .title {
-  flex: 1 1 auto; /* Заголовок займет оставшееся пространство */
-  margin-right: 20px; /* Отступ справа от заголовка */
+  flex: 1 1 auto;
+  margin-right: 20px;
 }
 
 .ratingContainer,
 .chapterContainer {
   display: flex;
-  flex-direction: column; /* Располагает элементы внутри контейнера в столбик */
+  flex-direction: column;
   align-items: center;
-  margin: 0 10px; /* Отступы между контейнерами */
+  margin: 0 10px;
 }
 
 .label {
-  margin-bottom: 5px; /* Отступ снизу от метки */
+  margin-bottom: 5px;
 }
 
 .rating,
 .chapterCount {
-  font-weight: bold; /* Выделение текста */
+  font-weight: bold;
 }
 
-/* Дополнительные стили, чтобы элементы не накладывались друг на друга при узком экране */
+/* Additional styles for narrow screens */
 @media (max-width: 600px) {
+  .container_Image {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .stickyContainer {
+    margin-right: 0;
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .contentContainer {
+    margin-left: 0;
+    max-width: 100%;
+    padding: 10px;
+  }
+
   .infoContainer {
     flex-direction: column;
     align-items: flex-start;
@@ -169,24 +207,19 @@
   .chapterContainer {
     margin-bottom: 10px;
   }
+
+  .descriptionContainer {
+    width: 100%;
+  }
+
+  .chapter {
+    padding: 10px;
+  }
+
+  .tabButton {
+    padding: 5px 10px;
+    margin-right: 5px;
+  }
 }
 
-/* Global scrollbar styles */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #007bff #f1f1f1;
-}
 
-*::-webkit-scrollbar {
-  width: 8px;
-}
-
-*::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: #007bff;
-  border-radius: 10px;
-  border: 2px solid #f1f1f1;
-}

@@ -1,5 +1,6 @@
 import ReactDOM from 'react-dom';
 import './styles/reset.css';
+import  './index.css'
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store/store';
@@ -12,7 +13,8 @@ import { Reader } from './components/reader/Reader';
 import { ComicsTopPage } from './components/page/ComicsTopPage';
 import { AddTitle } from './components/TitleManagement/addTitle';
 import { EditTitle } from './components/TitleManagement/editTitle';
-import {AddChapter} from './components/TitleManagement/AddChapter';
+import {AddChapter} from './components/TitleManagement/addChapter';
+import {EditChapter} from './components/TitleManagement/editChapter';
 
 
 ReactDOM.render(
@@ -29,8 +31,9 @@ ReactDOM.render(
         <Route path="/edit-title" element={<EditTitle />} />
         <Route path="/edit-title/:titleSlug" element={<EditTitle />} />
         <Route path="/add-chapter" element={<AddChapter/>} />
+        <Route path="/delete-chapter" element={<EditChapter/>} />
       </Routes>
-      <Footer />
+      <Footer/>
     </Router>
   </Provider>,
   document.getElementById('root')

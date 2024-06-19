@@ -1,0 +1,28 @@
+ .footer {
+    background-color: #f5f5dc;
+    color: #000000;
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+    bottom: 0;
+  }
+  
+  .footerContent {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footerText {
+    font-size: 14px;
+  }
+  
+  @media screen and (max-width: 768px) {
+    .footerContent {
+      padding: 0 20px;
+    }
+  
+    .footerText {
+      font-size: 12px; 
+    }
+  }
+  

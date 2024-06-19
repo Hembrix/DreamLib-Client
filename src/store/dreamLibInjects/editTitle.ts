@@ -16,7 +16,7 @@ export const api = baseApi.injectEndpoints({
     }),
     deleteTitle: builder.mutation({
       query: (titleSlug: string) => ({
-        url: `api/delete/title/${titleSlug}`, // URL для удаления произведения
+        url: `api/del/titles/${titleSlug}`, // URL для удаления произведения
         method: 'DELETE',
       }),
     }),

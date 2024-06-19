@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState } from 'react';
 import { useSearchTitlesQuery } from '../../store/dreamLibInjects/GetSearchResult';
 import styles from './SearchModal.module.css';
 import { Link } from 'react-router-dom';
@@ -16,23 +16,16 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
     skip: !searchQuery,
   });
 
-  useEffect(() => {
-    if (!isOpen) {
-      setSearchQuery(''); // Сбрасываем состояние при закрытии модального окна
-    }
-  }, [isOpen]);
-
-  // Обработчик клика на фоновое модальное окно
   const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      setSearchQuery(''); // Сбрасываем состояние поиска
-      onClose(); // Вызываем onClose из пропсов
+      setSearchQuery('');
+      onClose();
     }
   };
 
-  const handleClose = () => {
-    setSearchQuery(''); // Сбрасываем состояние поиска
-    onClose(); // Вызываем onClose из пропсов
+  const handleTitleClick = () => {
+    setSearchQuery('');
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -40,20 +33,25 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
   return (
     <div className={styles.modalOverlay} onClick={handleOverlayClick}>
       <div className={styles.modalContent}>
-        <button className={styles.closeButton} onClick={handleClose}>&times;</button>
         <input
           type="text"
           className={styles.searchInput}
           placeholder="Поиск..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          style={{ minWidth: '160px', width: 'calc(100% - 20px)' }}
         />
         {isLoading ? (
           <div>Loading...</div>
         ) : (
           <div>
-            {searchResults.map((result: Title, index) => (
-              <Link to={`/comics/${result.titleSlug}`} key={index} className={styles.resultItem}>
+            {searchQuery && searchResults.map((result: Title) => (
+              <Link
+                to={`/comics/${result.titleSlug}`}
+                key={result.titleSlug}
+                className={styles.resultItem}
+                onClick={handleTitleClick}
+              >
                 <img src={`${BASE_URL}${result.imagetitle}`} alt={result.title} />
                 <div className={styles.resultText}>{result.title}</div>
               </Link>
